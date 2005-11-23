@@ -1,0 +1,1 @@
+start javaw -cp .;foreign-classes.zip org.zephyrsoft.sdb.Start test.sdb
