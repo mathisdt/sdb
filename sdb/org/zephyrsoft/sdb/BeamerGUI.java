@@ -324,23 +324,7 @@ public class BeamerGUI extends JFrame {
 							}
 						}
 					} else if (e.getKeyCode() == KeyEvent.VK_P) {
-					    if (beamerview != null && beamerview.getActualSong() != null && beamerview.getActualSong().getID() != -2) {
-							try {
-								int newIndex = structure.findSong(beamerview.getActualSong()) - 1;
-								if (newIndex < list.getModel().getSize() && newIndex >= 0) {
-									list.setSelectedIndex(newIndex);
-									showActualSong();
-								}
-							} catch (Exception ex) {
-								ex.printStackTrace();
-							}
-						} else {
-							// einfach nur die Markierung verschieben
-							int to_select = list.getSelectedIndex()-1;
-							if (to_select>=0) {
-								list.setSelectedIndex(to_select);
-							}
-						}
+					    do_prev();
 					}
 				}
 			    
@@ -402,46 +386,14 @@ public class BeamerGUI extends JFrame {
 		nextButton.addActionListener(
 			new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (beamerview != null && beamerview.getActualSong() != null && beamerview.getActualSong().getID() != -2) {
-						try {
-							int newIndex = structure.findSong(beamerview.getActualSong()) + 1;
-							if (newIndex < list.getModel().getSize() && newIndex >= 0) {
-								list.setSelectedIndex(newIndex);
-								showActualSong();
-							}
-						} catch (Exception ex) {
-							ex.printStackTrace();
-						}
-					} else {
-						// einfach nur die Markierung verschieben
-						int to_select = list.getSelectedIndex()+1;
-						if (to_select<structure.getSongCount()) {
-							list.setSelectedIndex(to_select);
-						}
-					}
+					do_next();
 				}
 			}
 		);
 		previousButton.addActionListener(
 			new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (beamerview != null && beamerview.getActualSong() != null && beamerview.getActualSong().getID() != -2) {
-						try {
-							int newIndex = structure.findSong(beamerview.getActualSong()) - 1;
-							if (newIndex < list.getModel().getSize() && newIndex >= 0) {
-								list.setSelectedIndex(newIndex);
-								showActualSong();
-							}
-						} catch (Exception ex) {
-							ex.printStackTrace();
-						}
-					} else {
-						// einfach nur die Markierung verschieben
-						int to_select = list.getSelectedIndex()-1;
-						if (to_select>=0) {
-							list.setSelectedIndex(to_select);
-						}
-					}
+					do_prev();
 				}
 			}
 		);
@@ -523,25 +475,7 @@ public class BeamerGUI extends JFrame {
 		emptyButton.addActionListener(
 			new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					try {
-						int selected_was_list = list.getSelectedIndex();
-						int selected_was = -1;
-						if (beamerview != null) {
-							selected_was = structure.findSong(beamerview.getActualSong());
-						}
-						list.removeSelectionInterval(0, list.getModel().getSize() - 1);
-						showActualSong();
-						if (selected_was != -1 && selected_was+1 < structure.getSongCount()) {
-							list.setSelectedIndex(selected_was+1);
-						} else if (selected_was != -1) {
-							list.setSelectedIndex(selected_was);
-						} else {
-							list.setSelectedIndex(selected_was_list);
-						}
-						goButton.requestFocus();
-					} catch (Exception ex) {
-						ex.printStackTrace();
-					}
+					do_empty();
 				}
 			}
 		);
@@ -589,7 +523,72 @@ public class BeamerGUI extends JFrame {
 		);
 		// EVENT HANDLER ENDE ========================================
 		
-		show();
+		// alles für globalKeyListener registrieren:
+		parent.registerGKL(getContentPane());
+		
+		setVisible(true);
+	}
+	
+	public void do_empty() {
+		try {
+			int selected_was_list = list.getSelectedIndex();
+			int selected_was = -1;
+			if (beamerview != null) {
+				selected_was = structure.findSong(beamerview.getActualSong());
+			}
+			list.removeSelectionInterval(0, list.getModel().getSize() - 1);
+			showActualSong();
+			if (selected_was != -1 && selected_was+1 < structure.getSongCount()) {
+				list.setSelectedIndex(selected_was+1);
+			} else if (selected_was != -1) {
+				list.setSelectedIndex(selected_was);
+			} else {
+				list.setSelectedIndex(selected_was_list);
+			}
+			goButton.requestFocus();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public void do_next() {
+		if (beamerview != null && beamerview.getActualSong() != null && beamerview.getActualSong().getID() != -2) {
+			try {
+				int newIndex = structure.findSong(beamerview.getActualSong()) + 1;
+				if (newIndex < list.getModel().getSize() && newIndex >= 0) {
+					list.setSelectedIndex(newIndex);
+					showActualSong();
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		} else {
+			// einfach nur die Markierung verschieben
+			int to_select = list.getSelectedIndex()+1;
+			if (to_select<structure.getSongCount()) {
+				list.setSelectedIndex(to_select);
+			}
+		}
+	}
+	
+	public void do_prev() {
+		if (beamerview != null && beamerview.getActualSong() != null && beamerview.getActualSong().getID() != -2) {
+			try {
+				int newIndex = structure.findSong(beamerview.getActualSong()) - 1;
+				if (newIndex < list.getModel().getSize() && newIndex >= 0) {
+					list.setSelectedIndex(newIndex);
+					showActualSong();
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		} else {
+			// einfach nur die Markierung verschieben
+			int to_select = list.getSelectedIndex()-1;
+			if (to_select>=0) {
+				list.setSelectedIndex(to_select);
+			}
+		}
 	}
 	
 	public void reloadModel(boolean reselect) {
@@ -657,8 +656,14 @@ public class BeamerGUI extends JFrame {
 	
 	protected void do_delete() {
 		if (list.getSelectedValue() != null ) {
+			int prevSel = list.getSelectedIndex();
 			structure.delete(list.getSelectedIndex());
 			list.setListData(structure.getSongs(((Boolean)parent.getOptions().get("bst")).booleanValue())); //$NON-NLS-1$
+			try {
+				list.getSelectionModel().setSelectionInterval(prevSel, prevSel);
+			} catch (Exception ex) {
+				list.getSelectionModel().setSelectionInterval(prevSel-1, prevSel-1);
+			}
 		}
 	}
 	
@@ -677,7 +682,7 @@ public class BeamerGUI extends JFrame {
 			nextFoilButton.setEnabled(true);
 			previousFoilButton.setEnabled(true);
 			for (int i = 0; i < song.getFoilCount(); i++) {
-				goFoilBox.addItem(Messages.getString("BeamerGUI.55") + (i+1) + ": " + song.getFoilText(i).substring(0, 13) + "..."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+				goFoilBox.addItem(Messages.getString("BeamerGUI.55") + (i+1) + ": " + ( song.getFoilText(i).length() <= 13 ? song.getFoilText(i) : song.getFoilText(i).substring(0, 13)) + "..."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 			}
 			goFoilBox.setSelectedIndex(0);
 		}
@@ -696,7 +701,7 @@ public class BeamerGUI extends JFrame {
 				startFoilBox.setEnabled(true);
 				startFoilButton.setEnabled(true);
 				for (int i = 0; i < song.getFoilCount(); i++) {
-					startFoilBox.addItem(Messages.getString("BeamerGUI.55") + (i+1) + ": " + song.getFoilText(i).substring(0, 13) + "..."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+					startFoilBox.addItem(Messages.getString("BeamerGUI.55") + (i+1) + ": " + ( song.getFoilText(i).length()<=13 ? song.getFoilText(i) : song.getFoilText(i).substring(0, 13)) + "..."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 				}
 				startFoilBox.setSelectedIndex(0);
 			}
@@ -704,7 +709,7 @@ public class BeamerGUI extends JFrame {
 	}
 	
 	// EVENT HANLDER HILFSMETHODEN:
-	private final void showActualSong() {
+	public final void showActualSong() {
 		showActualSong_Foil(0);
 	}
 	private final void showActualSong_Foil(int foil) {

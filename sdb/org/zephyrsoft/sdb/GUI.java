@@ -23,8 +23,8 @@ import org.zephyrsoft.util.*;
 
 public class GUI extends JFrame {
 
-	public static final String VERSION = "1.14"; //$NON-NLS-1$
-	public static final String DATE = "09.04.2005"; //$NON-NLS-1$
+	public static final String VERSION = "1.15"; //$NON-NLS-1$
+	public static final String DATE = "09.03.2006"; //$NON-NLS-1$
 	
 	public static final String SEPARATOR = "###"; //$NON-NLS-1$
 	
@@ -33,6 +33,8 @@ public class GUI extends JFrame {
 	
 	private Options options = null;
 	private static String options_filename = "SDB.options"; //$NON-NLS-1$
+	
+	public KeyListener globalKeyListener = null;
 	
 	// für den Ausdruck definiert:
 	Font titelfont = new Font("Arial", Font.BOLD, 22); //$NON-NLS-1$
@@ -350,6 +352,59 @@ public class GUI extends JFrame {
 				}
 			}
 		);
+		globalKeyListener =
+			new KeyListener() {
+				public void keyPressed(KeyEvent e) {
+					if (e.getKeyCode() == KeyEvent.VK_F12) {
+						// TEST
+						System.out.println("TEST");
+						
+						
+						
+					} else if (e.getKeyCode() == KeyEvent.VK_F13) {
+						// Scroll Up
+						
+					} else if (e.getKeyCode() == KeyEvent.VK_F14) {
+						// Scroll Down
+						
+					} else if (e.getKeyCode() == KeyEvent.VK_F16) {
+						// prev. Song
+						if (beamergui != null) {
+							beamergui.do_prev();
+						}
+					} else if (e.getKeyCode() == KeyEvent.VK_F17) {
+						// Start Displaying
+						if (beamergui != null) {
+							beamergui.showActualSong();
+						}
+					} else if (e.getKeyCode() == KeyEvent.VK_F18) {
+						// next Song
+						if (beamergui != null) {
+							beamergui.do_next();
+						}
+					} else if (e.getKeyCode() == KeyEvent.VK_F19) {
+						// blank Display
+						if (beamergui != null) {
+							beamergui.do_empty();
+						}
+					} else if (e.getKeyCode() == KeyEvent.VK_F21) {
+						// show Pres. Control Window
+						do_showbeamercontrol();
+					} else if (e.getKeyCode() == KeyEvent.VK_F22) {
+						// show DB Window
+						getThis().toFront();
+					}
+				}
+			    
+				public void keyTyped(KeyEvent e) {
+					// nix
+				}
+			    
+				public void keyReleased(KeyEvent e) {
+					// nix
+				}
+			};
+		
 		KeyListener myKeyListener =
 			new KeyListener() {
 				public void keyPressed(KeyEvent e) {
@@ -669,11 +724,7 @@ public class GUI extends JFrame {
 		menuitem_view_beamerpres.addActionListener(
 			new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if (beamergui == null) {
-						beamergui = new BeamerGUI(getThis());
-					} else {
-						beamergui.toFront();
-					}
+					do_showbeamercontrol();
 				}
 			}
 		);
@@ -729,7 +780,10 @@ public class GUI extends JFrame {
 		column = table.getColumnModel().getColumn(2);
 		column.setPreferredWidth(40);
 		
-		show();
+		// alle Components mit globalKeyListener verbinden:
+		registerGKL(getContentPane());
+		
+		setVisible(true);
 		
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         Rectangle r2 = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices()[0].getDefaultConfiguration().getBounds();
@@ -750,6 +804,25 @@ public class GUI extends JFrame {
         } else {
             setExtendedState(MAXIMIZED_BOTH);
         }
+	}
+	
+	public void registerGKL(Component comp) {
+		if (comp instanceof Container) {
+			comp.addKeyListener(globalKeyListener);
+			for (int i = 0; i < ((Container)comp).getComponentCount(); i++) {
+				registerGKL(((Container)comp).getComponent(i));
+			}
+		} else {
+			comp.addKeyListener(globalKeyListener);
+		}
+	}
+	
+	public void do_showbeamercontrol() {
+		if (beamergui == null) {
+			beamergui = new BeamerGUI(getThis());
+		} else {
+			beamergui.toFront();
+		}
 	}
 	
 	private void songnewfromRTF() {
