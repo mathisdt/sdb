@@ -43,6 +43,7 @@ public class OptionsGUI extends JFrame {
 	JCheckBox beginn_statt_titel;
 	JCheckBox zeige_titel;
 	JCheckBox mehrere_folien;
+	JTextField scroll_amount;
 	
 	public OptionsGUI(GUI parent) {
 		super(Messages.getString("OptionsGUI.0")); //$NON-NLS-1$
@@ -89,9 +90,11 @@ public class OptionsGUI extends JFrame {
 		beginn_statt_titel = new JCheckBox("", (runtime.get("bst")==null ? false : ((Boolean)runtime.get("bst")).booleanValue())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		zeige_titel = new JCheckBox("", (runtime.get("zt")==null ? true : ((Boolean)runtime.get("zt")).booleanValue())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		mehrere_folien = new JCheckBox("", (runtime.get("mf")==null ? false : ((Boolean)runtime.get("mf")).booleanValue())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		scroll_amount = new JTextField((runtime.get("scroll")==null ? "5" : runtime.get("scroll").toString()));
+		
 		
 		// GUI aufbauen:
-		contentPane.setLayout(new GridLayout(16, 2));
+		contentPane.setLayout(new GridLayout(17, 2));
 		// vorne
 		contentPane.add(titelfont);
 		contentPane.add(altertitelfont);
@@ -121,6 +124,8 @@ public class OptionsGUI extends JFrame {
 		contentPane.add(zeige_titel);
 		contentPane.add(new JLabel(Messages.getString("OptionsGUI.39") + GUI.SEPARATOR + "\"")); //$NON-NLS-1$ //$NON-NLS-2$
 		contentPane.add(mehrere_folien);
+		contentPane.add(new JLabel("Scrolle so viele Pixel auf einmal"));
+		contentPane.add(scroll_amount);
 		contentPane.add(new JLabel(" ")); //$NON-NLS-1$
 		contentPane.add(new JLabel(" ")); //$NON-NLS-1$
 		contentPane.add(cancelButton);
@@ -230,6 +235,7 @@ public class OptionsGUI extends JFrame {
 						getRuntime().put("bst", new Boolean(beginn_statt_titel.isSelected())); //$NON-NLS-1$
 						getRuntime().put("zt", new Boolean(zeige_titel.isSelected())); //$NON-NLS-1$
 						getRuntime().put("mf", new Boolean(mehrere_folien.isSelected())); //$NON-NLS-1$
+						getRuntime().put("scroll", (new Integer(scroll_amount.getText())).intValue()<1 ? new Integer(1) : new Integer(scroll_amount.getText())); //$NON-NLS-1$
 					} catch (Exception ex) {
 						ex.printStackTrace();
 					}

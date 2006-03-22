@@ -26,7 +26,6 @@ public class BeamerView extends JFrame {
 	
 	private JLabel titel;
 	private JTextPane text;
-//	private JTextArea copyright;
 	
 	private Song actualSong = null;
 	
@@ -115,10 +114,30 @@ public class BeamerView extends JFrame {
 		
 	}
 	
-//	public void showSong(Song newsong, Font titelfont, Font textfont, Font copyrightfont, boolean printAccords) {
-//		showSong(newsong, titelfont, textfont, copyrightfont, printAccords, 0);
-//	}
-
+	public void scroll_down() {
+		int scrollingIsAt = scrollPane.getVerticalScrollBar().getValue();
+		Rectangle rect = back.getVisibleRect();
+		rect.setLocation(rect.x, rect.y + ((Integer)parent.parent.getOptions().get("scroll")).intValue());
+		if (rect.y > back.getHeight()-rect.height) {
+			rect.setLocation(rect.x, back.getHeight()-rect.height);
+		}
+		back.scrollRectToVisible(rect);
+	}
+	
+	public void scroll_up() {
+		int scrollingIsAt = scrollPane.getVerticalScrollBar().getValue();
+		Rectangle rect = back.getVisibleRect();
+		rect.setLocation(rect.x, rect.y - ((Integer)parent.parent.getOptions().get("scroll")).intValue());
+		if (rect.y > back.getHeight()-rect.height) {
+			rect.setLocation(rect.x, back.getHeight()-rect.height);
+		}
+		back.scrollRectToVisible(rect);
+	}
+	
+	public Song getSong() {
+		return actualSong;
+	}
+	
 	public void showSong(Song newsong, Font titelfont, Font textfont, Font translatefont, Font copyrightfont, boolean printAccords, int foil) {
 	    this.titelfont = titelfont;
 		this.textfont = textfont;
@@ -340,178 +359,6 @@ public class BeamerView extends JFrame {
 	    showSong(actualSong, titelfont, textfont, translatefont, copyrightfont, printAccords, newfoil);
 	}
 	
-//	private void showFoil(int newfoil, boolean printAccords) {
-//		
-//	    actualFoil = newfoil;
-//	    
-//		back.removeAll();
-//		try {
-//			this.setBackground((Color)parent.getOptions().get("bgco")); //$NON-NLS-1$
-//			this.getRootPane().setBackground((Color)parent.getOptions().get("bgco")); //$NON-NLS-1$
-//			this.getContentPane().setBackground((Color)parent.getOptions().get("bgco")); //$NON-NLS-1$
-//		} catch (Exception ex) {}
-//		back.setBackground((Color)parent.getOptions().get("bgco")); //$NON-NLS-1$
-//		back.repaint();
-//		
-//		
-//		// ((Boolean)parent.parent.getOptions().get("bst")).booleanValue()
-//		titel = new JLabel(parent.getNormalTitleByID(actualSong.getID()));
-//		text = new JTextPane();
-//		if (((Boolean)parent.parent.getOptions().get("mf")).booleanValue()) { //$NON-NLS-1$
-//			if ( printAccords ) {
-//				text.setText(actualSong.getTextAndAccordsInFont_Foil(textfont, false, newfoil));
-//			} else {
-//				text.setText(actualSong.getOnlyText_Foil(newfoil));
-//			}
-//		} else {
-//			if ( printAccords ) {
-//				text.setText(actualSong.getTextAndAccordsInFont(textfont, false));
-//			} else {
-//				text.setText(actualSong.getOnlyText());
-//			}
-//		}
-//		
-//		// Text nach reg. Ausdruck "[.+]" durchsuchen
-//		Vector vonalle = new Vector();
-//		Vector bisalle = new Vector();
-//		String text1 = text.getText();
-//		int von = text1.indexOf("["); //$NON-NLS-1$
-//		while (von >= 0) {
-//		    text1 = text1.substring(0, von) + text1.substring(von+1);
-//		    vonalle.addElement(new Integer(von));
-//		    int bis = text1.indexOf("]", von); //$NON-NLS-1$
-//		    text1 = text1.substring(0, bis) + text1.substring(bis+1);
-//		    bisalle.addElement(new Integer(bis));
-//		    von = text1.indexOf("["); //$NON-NLS-1$
-//		}
-//		text.setText(text1);
-//		
-//		StyledDocument doc = text.getStyledDocument();
-//		Style defaultstyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
-//		
-//		Style titlestyle = doc.addStyle("title", defaultstyle); //$NON-NLS-1$
-//		StyleConstants.setItalic(titlestyle, titelfont.isItalic());
-//		StyleConstants.setBold(titlestyle, titelfont.isBold());
-//		StyleConstants.setFontFamily(titlestyle, titelfont.getFamily());
-//		StyleConstants.setFontSize(titlestyle, titelfont.getSize());
-//		
-//		Style textstyle = doc.addStyle("text", defaultstyle); //$NON-NLS-1$
-//		StyleConstants.setItalic(textstyle, textfont.isItalic());
-//		StyleConstants.setBold(textstyle, textfont.isBold());
-//		StyleConstants.setFontFamily(textstyle, textfont.getFamily());
-//		StyleConstants.setFontSize(textstyle, textfont.getSize());
-//		
-//		Style translatestyle = doc.addStyle("translate", defaultstyle); //$NON-NLS-1$
-//		StyleConstants.setItalic(translatestyle, translatefont.isItalic());
-//		StyleConstants.setBold(translatestyle, translatefont.isBold());
-//		StyleConstants.setFontFamily(translatestyle, translatefont.getFamily());
-//		StyleConstants.setFontSize(translatestyle, translatefont.getSize());
-//		
-//		Style copyrightstyle = doc.addStyle("copyright", defaultstyle); //$NON-NLS-1$
-//		StyleConstants.setItalic(copyrightstyle, copyrightfont.isItalic());
-//		StyleConstants.setBold(copyrightstyle, copyrightfont.isBold());
-//		StyleConstants.setFontFamily(copyrightstyle, copyrightfont.getFamily());
-//		StyleConstants.setFontSize(copyrightstyle, copyrightfont.getSize());
-//		
-//		// Translate-Style zuweisen (die anderen werden noch nicht benutzt)
-//		for (int i = 0; i < vonalle.size(); i++) {
-//		    int von1 = ((Integer)vonalle.elementAt(i)).intValue();
-//		    int bis1 = ((Integer)bisalle.elementAt(i)).intValue();
-//		    try {
-//			    if (text.getText(bis1,1).equals("\n")) { //$NON-NLS-1$
-//			        bis1++;
-//			    }
-//		    } catch(Exception ex) {
-//		        ex.printStackTrace();
-//		    }
-//		    doc.setCharacterAttributes(von1, bis1-von1, doc.getStyle("translate"), false); //$NON-NLS-1$
-//		}
-//		
-//		
-//		copyright = new JTextArea(actualSong.getCopyright());
-//		
-//		titel.setFont((Font)parent.getOptions().get("tifo")); //$NON-NLS-1$
-//		text.setFont((Font)parent.getOptions().get("tefo")); //$NON-NLS-1$
-//		text.setBackground((Color)parent.getOptions().get("bgco")); //$NON-NLS-1$
-//		copyright.setFont((Font)parent.getOptions().get("cofo")); //$NON-NLS-1$
-//		titel.setForeground((Color)parent.getOptions().get("fgco")); //$NON-NLS-1$
-//		text.setForeground((Color)parent.getOptions().get("fgco")); //$NON-NLS-1$
-//		copyright.setForeground((Color)parent.getOptions().get("fgco")); //$NON-NLS-1$
-//		copyright.setBackground((Color)parent.getOptions().get("bgco")); //$NON-NLS-1$
-//		
-//		titel.setRequestFocusEnabled(false);
-//		text.setRequestFocusEnabled(false);
-//		copyright.setRequestFocusEnabled(false);
-//		
-//		Point punkt = new Point(((Integer)parent.getOptions().get("sple")).intValue(), ((Integer)parent.getOptions().get("spup")).intValue()); //$NON-NLS-1$ //$NON-NLS-2$
-//		
-//		/*
-//			Trick, damit die ÄÖÜ-Punkte in den ersten Zeilen angezeigt werden:
-//			Rand oben auf 15 Pixel setzen, dann schneidet Linux die Umlaut-
-//			Punkte nicht mehr ab! Natürlich muss dann die Position und Größe
-//			entsprechend korrigiert werden...
-//		*/
-//		if (parent.getOptions().get("zt")==null ? true : (((Boolean)parent.getOptions().get("zt")).booleanValue())) { //$NON-NLS-1$ //$NON-NLS-2$
-//			back.add(titel);
-//			titel.setSize(new Dimension(titel.getPreferredSize().width, titel.getPreferredSize().height + 15));
-//			titel.setLocation(new Point(punkt.x, punkt.y - 15));
-//			titel.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
-//			punkt.y += titel.getHeight() + ((Integer)parent.getOptions().get("sptt")).intValue(); //$NON-NLS-1$
-//		}
-//		back.add(text);
-//		text.setSize(new Dimension(text.getPreferredSize().width, text.getPreferredSize().height + 15));
-//		text.setLocation(new Point(punkt.x, punkt.y - 15));
-//		text.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
-//		punkt.y += text.getHeight() + ((Integer)parent.getOptions().get("sptc")).intValue(); //$NON-NLS-1$
-//		back.add(copyright);
-//		copyright.setSize(new Dimension(copyright.getPreferredSize().width, copyright.getPreferredSize().height + 15));
-//		copyright.setLocation(new Point(punkt.x, punkt.y - 15));
-//		copyright.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
-//		
-//		// jetzt die Größe von "back" setzen, passend zu allen darauf liegenden Components
-//		//                        Breite, Höhe
-//		Dimension size = new Dimension(1, 1);
-//		Component[] components = back.getComponents();
-//		for ( int i = 0;
-//			  i < components.length;
-//			  i++ ) {
-//			int component_max_x = components[i]
-//								  .getX() + components[i].getWidth();
-//			int component_max_y = components[i].getY() + components[i].getHeight();
-//			if ( component_max_x > size.getWidth() ) {
-//				size.width = component_max_x;
-//			}
-//			if ( component_max_y > size.getHeight() ) {
-//				size.height = component_max_y;
-//			}
-//		}
-//		size.height = size.height + ((Integer)parent.getOptions().get("spdo")).intValue(); //$NON-NLS-1$
-//		back.setPreferredSize(size);
-//		JTextArea oben = new JTextArea(" "); //$NON-NLS-1$
-//		back.add(oben);
-//		oben.setSize(oben.getPreferredSize());
-//		oben.setLocation(new Point(0, 0));
-//		oben.setBackground((Color)parent.getOptions().get("bgco")); //$NON-NLS-1$
-//		//scroll(back, TOP);
-//		int[] pixels = new int[16 * 16];
-//		Image image = Toolkit.getDefaultToolkit().createImage(
-//						  new MemoryImageSource(16, 16, pixels, 0, 16));
-//		Cursor transparentCursor =
-//			Toolkit.getDefaultToolkit().createCustomCursor
-//			(image, new Point(0, 0), "invisiblecursor"); //$NON-NLS-1$
-//		this.setCursor(transparentCursor);
-//		back.setCursor(transparentCursor);
-//		scrollPane.setCursor(transparentCursor);
-//		titel.setCursor(transparentCursor);
-//		text.setCursor(transparentCursor);
-//		copyright.setCursor(transparentCursor);
-//		
-//		
-//		
-//		
-//		
-//	}
-
 	public void exit() {
 		int answer = JOptionPane.YES_OPTION;
 		if (!parent.closing) {

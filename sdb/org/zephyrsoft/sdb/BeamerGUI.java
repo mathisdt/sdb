@@ -529,6 +529,18 @@ public class BeamerGUI extends JFrame {
 		setVisible(true);
 	}
 	
+	public void scroll_up() {
+		if (beamerview != null) {
+			beamerview.scroll_up();
+		}
+	}
+	
+	public void scroll_down() {
+		if (beamerview != null) {
+			beamerview.scroll_down();
+		}
+	}
+	
 	public void do_empty() {
 		try {
 			int selected_was_list = list.getSelectedIndex();
