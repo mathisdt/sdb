@@ -90,7 +90,7 @@ public class OptionsGUI extends JFrame {
 		beginn_statt_titel = new JCheckBox("", (runtime.get("bst")==null ? false : ((Boolean)runtime.get("bst")).booleanValue())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		zeige_titel = new JCheckBox("", (runtime.get("zt")==null ? true : ((Boolean)runtime.get("zt")).booleanValue())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		mehrere_folien = new JCheckBox("", (runtime.get("mf")==null ? false : ((Boolean)runtime.get("mf")).booleanValue())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		scroll_amount = new JTextField((runtime.get("scroll")==null ? "5" : runtime.get("scroll").toString()));
+		scroll_amount = new JTextField((runtime.get("scroll")==null ? "5" : runtime.get("scroll").toString())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
 		
 		// GUI aufbauen:
@@ -124,7 +124,7 @@ public class OptionsGUI extends JFrame {
 		contentPane.add(zeige_titel);
 		contentPane.add(new JLabel(Messages.getString("OptionsGUI.39") + GUI.SEPARATOR + "\"")); //$NON-NLS-1$ //$NON-NLS-2$
 		contentPane.add(mehrere_folien);
-		contentPane.add(new JLabel("Scrolle so viele Pixel auf einmal"));
+		contentPane.add(new JLabel(Messages.getString("OptionsGUI.62"))); //$NON-NLS-1$
 		contentPane.add(scroll_amount);
 		contentPane.add(new JLabel(" ")); //$NON-NLS-1$
 		contentPane.add(new JLabel(" ")); //$NON-NLS-1$

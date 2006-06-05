@@ -35,6 +35,14 @@ public class Structure {
 		this.parentGUI = parent;
 	}
 	
+	public void sortByTitle() {
+		Collections.sort(songs, new SongSorter(true));
+	}
+	
+	public void sortByBegin() {
+		Collections.sort(songs, new SongSorter(false));
+	}
+	
 	public void setParent(GUI parent) {
 		this.parentGUI = parent;
 	}
@@ -141,23 +149,7 @@ public class Structure {
 	
 	public static String getTitleOf(Song song, boolean bst) {
 		if (bst) {
-			String title = song.getTitel();
-			String ret = new String(title);
-			String text = song.getOnlyText() + "\n"; //$NON-NLS-1$
-			int i = text.indexOf("\n"); //$NON-NLS-1$
-			if (i != -1) {
-				ret = text.substring(0, i);
-				//System.out.println(title + " => " + ret);
-			}
-			while (ret.endsWith(" ") || ret.endsWith(",") ||  //$NON-NLS-1$ //$NON-NLS-2$
-					ret.endsWith(";") || ret.endsWith(":") || //$NON-NLS-1$ //$NON-NLS-2$
-					ret.endsWith(".") || ret.endsWith("!")) { //$NON-NLS-1$ //$NON-NLS-2$
-				ret = ret.substring(0, ret.length()-1);
-			}
-			while (ret.startsWith("1. ")) { //$NON-NLS-1$
-				ret = ret.substring(3, ret.length());
-			}
-			return ret;
+			return song.getFirstLine();
 		} else {
 			return song.getTitel();
 		}

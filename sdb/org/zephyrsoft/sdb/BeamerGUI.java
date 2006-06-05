@@ -50,6 +50,8 @@ public class BeamerGUI extends JFrame {
 	JMenuItem menuitem_file_open = null;
 	JMenuItem menuitem_file_save = null;
 	JMenuItem menuitem_file_saveas = null;
+	JMenuItem menuitem_file_sorttitle = null;
+	JMenuItem menuitem_file_sortbegin = null;
 	JMenuItem menuitem_window_exit = null;
 	JPanel contentPane = null;
 	BoxLayout boxLayout = null;
@@ -58,6 +60,9 @@ public class BeamerGUI extends JFrame {
 	JLabel actualSongRealTitel = null;
 	JLabel actualSongSprache = null;
 	JLabel actualSongFolie = null;
+	JLabel selSongTitle = null;
+	JLabel selSongRealTitle = null;
+	JLabel selSongLanguage = null;
 	int aktuelleFolie = 0;
 	JButton upButton = null;
 	JButton downButton = null;
@@ -108,11 +113,16 @@ public class BeamerGUI extends JFrame {
 		menuitem_file_open = new JMenuItem(Messages.getString("BeamerGUI.10")); //$NON-NLS-1$
 		menuitem_file_save = new JMenuItem(Messages.getString("BeamerGUI.11")); //$NON-NLS-1$
 		menuitem_file_saveas = new JMenuItem(Messages.getString("BeamerGUI.12")); //$NON-NLS-1$
+		menuitem_file_sorttitle = new JMenuItem(Messages.getString("BeamerGUI.3")); //$NON-NLS-1$
+		menuitem_file_sortbegin = new JMenuItem(Messages.getString("BeamerGUI.2")); //$NON-NLS-1$
 		menuitem_window_exit = new JMenuItem(Messages.getString("BeamerGUI.13")); //$NON-NLS-1$
 		
 		// Menü zusammenbauen
 		menubar.add(menu_file);
 		menubar.add(menu_window);
+		menu_file.add(menuitem_file_sorttitle);
+		menu_file.add(menuitem_file_sortbegin);
+		menu_file.addSeparator();
 		menu_file.add(menuitem_file_new);
 		menu_file.add(menuitem_file_open);
 		menu_file.add(menuitem_file_save);
@@ -138,6 +148,9 @@ public class BeamerGUI extends JFrame {
 		actualSongRealTitel = new JLabel(" "); //$NON-NLS-1$
 		actualSongSprache = new JLabel(" "); //$NON-NLS-1$
 		actualSongFolie = new JLabel(" "); //$NON-NLS-1$
+		selSongTitle = new JLabel(" "); //$NON-NLS-1$
+		selSongRealTitle = new JLabel(" "); //$NON-NLS-1$
+		selSongLanguage = new JLabel(" "); //$NON-NLS-1$
 		upButton = new JButton(Messages.getString("BeamerGUI.18")); //$NON-NLS-1$
 		downButton = new JButton(Messages.getString("BeamerGUI.19")); //$NON-NLS-1$
 		deleteButton = new JButton(Messages.getString("BeamerGUI.20")); //$NON-NLS-1$
@@ -173,7 +186,21 @@ public class BeamerGUI extends JFrame {
 		this.setJMenuBar(menubar);
 		
 		// links:
-		pane.setLeftComponent(new JScrollPane(list));
+		JSplitPane li = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		JPanel lio = new JPanel();
+		BoxLayout blay = new BoxLayout(lio, BoxLayout.X_AXIS);
+		lio.setLayout(blay);
+		lio.add(new JScrollPane(list));
+		li.setTopComponent(lio);
+		pane.setLeftComponent(li);
+		JPanel liu = new JPanel();
+		BoxLayout liulay = new BoxLayout(liu, BoxLayout.Y_AXIS);
+		liu.setLayout(liulay);
+		liu.add(selSongTitle);
+		liu.add(selSongRealTitle);
+		liu.add(selSongLanguage);
+		li.setBottomComponent(liu);
+		li.setDividerLocation(480);
 		
 		// rechts:
 		JPanel re = new JPanel();
@@ -220,7 +247,7 @@ public class BeamerGUI extends JFrame {
 		foils.add(goFoilBox);
 		foils.add(goFoilButton);
 		reul.add(foils);
-		reul.add(new JLabel(""));
+		reul.add(new JLabel("")); //$NON-NLS-1$
 		reul.add(hidePresentationButton);
 		JPanel reur = new JPanel(new BorderLayout());
 		reur_innen_gridbag = new GridBagLayout();
@@ -275,6 +302,23 @@ public class BeamerGUI extends JFrame {
 		list.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				fillStartFoilList();
+				if (list.getSelectedValue() != null) {
+					Song newsong = (Song)list.getSelectedValue();
+					String title = newsong.getTitel();
+					String realtitle = getNormalTitleByID(newsong.getID());
+					if (StringTools.replace(StringTools.replace(title, ".", ""), ",", "").equalsIgnoreCase(StringTools.replace(StringTools.replace(realtitle, ".", ""), ",", ""))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+						selSongTitle.setText(title);
+						selSongRealTitle.setText(" "); //$NON-NLS-1$
+					} else {
+						selSongTitle.setText(title);
+						selSongRealTitle.setText(Messages.getString("BeamerGUI.70") + realtitle + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+					}
+					selSongLanguage.setText("(" + newsong.getSprache() + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+				} else {
+					selSongTitle.setText(""); //$NON-NLS-1$
+					selSongRealTitle.setText(""); //$NON-NLS-1$
+					selSongLanguage.setText(""); //$NON-NLS-1$
+				}
 			}
 		});
 		
@@ -458,11 +502,11 @@ public class BeamerGUI extends JFrame {
 			new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
-					    if (hidePresentationButton.getText().equals("Anzeige verstecken")) {
-					        hidePresentationButton.setText("Anzeige zeigen");
+					    if (hidePresentationButton.getText().equals(Messages.getString("BeamerGUI.0"))) { //$NON-NLS-1$
+					        hidePresentationButton.setText(Messages.getString("BeamerGUI.107")); //$NON-NLS-1$
 					        beamerview.hide();
 					    } else {
-					        hidePresentationButton.setText("Anzeige verstecken");
+					        hidePresentationButton.setText(Messages.getString("BeamerGUI.108")); //$NON-NLS-1$
 					        beamerview.show();
 					    }
 						
@@ -514,6 +558,20 @@ public class BeamerGUI extends JFrame {
 				}
 			}
 		);
+		menuitem_file_sorttitle.addActionListener(
+			new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					sortlist(true);
+				}
+			}
+		);
+		menuitem_file_sortbegin.addActionListener(
+			new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					sortlist(false);
+				}
+			}
+		);
 		menuitem_window_exit.addActionListener(
 			new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -527,6 +585,17 @@ public class BeamerGUI extends JFrame {
 		parent.registerGKL(getContentPane());
 		
 		setVisible(true);
+	}
+	
+	public void sortlist(boolean byTitle) {
+		// Liste alphabetisch sortieren nach Titel wenn afterTitle==true,
+		// sonst nach Liedanfang
+		if (byTitle) {
+			structure.sortByTitle();
+		} else {
+			structure.sortByBegin();
+		}
+		reloadModel(true);
 	}
 	
 	public void scroll_up() {

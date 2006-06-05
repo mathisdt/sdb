@@ -634,7 +634,7 @@ public class GUI extends JFrame {
 		menuitem_file_version.addActionListener(
 			new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(GUI.this, "<html><b><u>Song Database " + VERSION + "</u></b><br><br>" + Messages.getString("GUI.1") + "<font size=\"+1\"><b>" + Messages.getString("GUI.0") + "</b></font></html>", "Version " + VERSION + Messages.getString("GUI.2") + DATE, JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
+					JOptionPane.showMessageDialog(GUI.this, "<html><b><u>Song Database " + VERSION + "</u></b><br><br>" + Messages.getString("GUI.1") + "<font size=\"+1\"><b>" + Messages.getString("GUI.0") + "</b></font></html>", Messages.getString("GUI.90") + VERSION + Messages.getString("GUI.2") + DATE, JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
 				}
 			}
 		);

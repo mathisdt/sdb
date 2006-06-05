@@ -119,7 +119,7 @@ public class PrintView extends JFrame {
 		    bisalle.addElement(new Integer(bis+nachher));
 		    von = text1.indexOf("["); //$NON-NLS-1$
 		}
-		text.setText(text1 + "\n\n\n" + song.getCopyright());
+		text.setText(text1 + "\n\n\n" + song.getCopyright()); //$NON-NLS-1$
 		text.setFont(textfont);
 		
 		StyledDocument doc = text.getStyledDocument();
@@ -314,7 +314,7 @@ public class PrintView extends JFrame {
 			    int en = rest.indexOf("]", st); //$NON-NLS-1$
 			    if (en == -1) {
 			        en = rest.length();
-			        rest += "]";
+			        rest += "]"; //$NON-NLS-1$
 			    }
 			    String thistext = rest.substring(0, st);
 			    String thistranslate = rest.substring(st+1, en);

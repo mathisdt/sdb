@@ -30,6 +30,26 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 		sprache = Messages.getString("Song.7"); //$NON-NLS-1$
 	}
 	
+	public String getFirstLine() {
+		String title = getTitel();
+		String ret = new String(title);
+		String text = getOnlyText() + "\n"; //$NON-NLS-1$
+		int i = text.indexOf("\n"); //$NON-NLS-1$
+		if (i != -1) {
+			ret = text.substring(0, i);
+			//System.out.println(title + " => " + ret);
+		}
+		while (ret.endsWith(" ") || ret.endsWith(",") ||  //$NON-NLS-1$ //$NON-NLS-2$
+				ret.endsWith(";") || ret.endsWith(":") || //$NON-NLS-1$ //$NON-NLS-2$
+				ret.endsWith(".") || ret.endsWith("!")) { //$NON-NLS-1$ //$NON-NLS-2$
+			ret = ret.substring(0, ret.length()-1);
+		}
+		while (ret.startsWith("1. ")) { //$NON-NLS-1$
+			ret = ret.substring(3, ret.length());
+		}
+		return ret;
+	}
+	
 	public void importTextFromClipboard(Frame parent) {
 		// Liest den Text der Zwischenablage und berücksichtigt dabei die proportionale Schrift.
 		try {
@@ -343,14 +363,14 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 				pos = dtext.indexOf(GUI.SEPARATOR, prepos);
 			}
 			dtext = dtext.substring(prepos, pos);
-			String ret = "";
+			String ret = ""; //$NON-NLS-1$
 			int nextone = 0;
 			try {
 				while (nextone >= 0 && nextone < dtext.length()) {
-				    int nextnext = dtext.indexOf("\n", nextone);
+				    int nextnext = dtext.indexOf("\n", nextone); //$NON-NLS-1$
 				    String line = dtext.substring(nextone, nextnext);
 				    if (isTextLine(line)) {
-				        ret += line + " ";
+				        ret += line + " "; //$NON-NLS-1$
 				    }
 				    nextone = nextnext+1;
 				}

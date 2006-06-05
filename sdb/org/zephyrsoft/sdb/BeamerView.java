@@ -117,7 +117,7 @@ public class BeamerView extends JFrame {
 	public void scroll_down() {
 		int scrollingIsAt = scrollPane.getVerticalScrollBar().getValue();
 		Rectangle rect = back.getVisibleRect();
-		rect.setLocation(rect.x, rect.y + ((Integer)parent.parent.getOptions().get("scroll")).intValue());
+		rect.setLocation(rect.x, rect.y + ((Integer)parent.parent.getOptions().get("scroll")).intValue()); //$NON-NLS-1$
 		if (rect.y > back.getHeight()-rect.height) {
 			rect.setLocation(rect.x, back.getHeight()-rect.height);
 		}
@@ -127,7 +127,7 @@ public class BeamerView extends JFrame {
 	public void scroll_up() {
 		int scrollingIsAt = scrollPane.getVerticalScrollBar().getValue();
 		Rectangle rect = back.getVisibleRect();
-		rect.setLocation(rect.x, rect.y - ((Integer)parent.parent.getOptions().get("scroll")).intValue());
+		rect.setLocation(rect.x, rect.y - ((Integer)parent.parent.getOptions().get("scroll")).intValue()); //$NON-NLS-1$
 		if (rect.y > back.getHeight()-rect.height) {
 			rect.setLocation(rect.x, back.getHeight()-rect.height);
 		}
@@ -212,7 +212,7 @@ public class BeamerView extends JFrame {
 		    bisalle.addElement(new Integer(bis+nachher));
 		    von = text1.indexOf("["); //$NON-NLS-1$
 		}
-		text.setText(text1 + "\n" + newsong.getCopyright());
+		text.setText(text1 + "\n" + newsong.getCopyright()); //$NON-NLS-1$
 		
 		StyledDocument doc = text.getStyledDocument();
 		Style defaultstyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
@@ -236,7 +236,7 @@ public class BeamerView extends JFrame {
 		StyleConstants.setFontSize(translatestyle, translatefont.getSize());
 		
 		Style sptc = doc.addStyle("sptc", defaultstyle); //$NON-NLS-1$
-		StyleConstants.setFontSize(sptc, ((Integer)parent.getOptions().get("sptc")).intValue());
+		StyleConstants.setFontSize(sptc, ((Integer)parent.getOptions().get("sptc")).intValue()); //$NON-NLS-1$
 		
 		Style copyrightstyle = doc.addStyle("copyright", defaultstyle); //$NON-NLS-1$
 		StyleConstants.setItalic(copyrightstyle, copyrightfont.isItalic());
@@ -282,13 +282,13 @@ public class BeamerView extends JFrame {
 			Punkte nicht mehr ab! Natürlich muss dann die Position und Größe
 			entsprechend korrigiert werden...
 		*/
-		text.setBorder(BorderFactory.createEmptyBorder(((Integer)parent.getOptions().get(((parent.getOptions().get("zt")==null ? true : (((Boolean)parent.getOptions().get("zt")).booleanValue())) ? "spup" : "sptt"))).intValue(), ((Integer)parent.getOptions().get("sple")).intValue(),0,15));
+		text.setBorder(BorderFactory.createEmptyBorder(((Integer)parent.getOptions().get(((parent.getOptions().get("zt")==null ? true : (((Boolean)parent.getOptions().get("zt")).booleanValue())) ? "spup" : "sptt"))).intValue(), ((Integer)parent.getOptions().get("sple")).intValue(),0,15)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 		text.setEditable(false);
 //		back.setIgnoreRepaint(true);
 		back.add(text, BorderLayout.CENTER);
-		back.setBorder(BorderFactory.createEmptyBorder(0, 0, ((Integer)parent.getOptions().get("spdo")).intValue(), 0));
+		back.setBorder(BorderFactory.createEmptyBorder(0, 0, ((Integer)parent.getOptions().get("spdo")).intValue(), 0)); //$NON-NLS-1$
 		if (parent.getOptions().get("zt")==null ? true : (((Boolean)parent.getOptions().get("zt")).booleanValue())) { //$NON-NLS-1$ //$NON-NLS-2$
-		    titel.setBorder(BorderFactory.createEmptyBorder(((Integer)parent.getOptions().get("spup")).intValue(), ((Integer)parent.getOptions().get("sple")).intValue(),15,15));
+		    titel.setBorder(BorderFactory.createEmptyBorder(((Integer)parent.getOptions().get("spup")).intValue(), ((Integer)parent.getOptions().get("sple")).intValue(),15,15)); //$NON-NLS-1$ //$NON-NLS-2$
 			back.add(titel, BorderLayout.NORTH);
 		}
 
