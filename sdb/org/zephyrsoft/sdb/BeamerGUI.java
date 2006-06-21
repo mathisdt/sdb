@@ -307,11 +307,11 @@ public class BeamerGUI extends JFrame {
 					String title = newsong.getTitel();
 					String realtitle = getNormalTitleByID(newsong.getID());
 					if (StringTools.replace(StringTools.replace(title, ".", ""), ",", "").equalsIgnoreCase(StringTools.replace(StringTools.replace(realtitle, ".", ""), ",", ""))) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
-						selSongTitle.setText(title);
+						selSongTitle.setText(StringTools.cutdown(title, 25));
 						selSongRealTitle.setText(" "); //$NON-NLS-1$
 					} else {
-						selSongTitle.setText(title);
-						selSongRealTitle.setText(Messages.getString("BeamerGUI.70") + realtitle + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+						selSongTitle.setText(StringTools.cutdown(title, 25));
+						selSongRealTitle.setText(Messages.getString("BeamerGUI.70") + StringTools.cutdown(realtitle, 25) + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 					selSongLanguage.setText("(" + newsong.getSprache() + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 				} else {

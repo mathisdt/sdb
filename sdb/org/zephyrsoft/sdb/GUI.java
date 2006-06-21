@@ -23,8 +23,8 @@ import org.zephyrsoft.util.*;
 
 public class GUI extends JFrame {
 
-	public static final String VERSION = "1.15"; //$NON-NLS-1$
-	public static final String DATE = "22.03.2006"; //$NON-NLS-1$
+	public static final String VERSION = "1.17"; //$NON-NLS-1$
+	public static final String DATE = "21.06.2006"; //$NON-NLS-1$
 	
 	public static final String SEPARATOR = "###"; //$NON-NLS-1$
 	
@@ -710,7 +710,7 @@ public class GUI extends JFrame {
 						store(previouslySelectedIndex);
 						load(previouslySelectedIndex);
 						try {
-							new PrintView(structure.getSongByID(Integer.parseInt((String)table.getModel().getValueAt(table.getSelectedRow(), 3))), titelfont, textfont, translatefont, copyrightfont, true, false, 40, 40);
+							new PrintView(GUI.this, structure.getSongByID(Integer.parseInt((String)table.getModel().getValueAt(table.getSelectedRow(), 3))), titelfont, textfont, translatefont, copyrightfont, true, false, 40, 40);
 						} catch (Exception ex) {
 							System.out.println("CAUGHT:"); //$NON-NLS-1$
 							ex.printStackTrace();
@@ -1475,6 +1475,13 @@ public class GUI extends JFrame {
 		Vector data = model.getDataVector();
 		Collections.sort(data, new ColumnSorter(colIndex, ascending));
 		model.fireTableStructureChanged();
+	}
+	
+	/** 
+	 * Gets all songs in "natural" form.
+	 */
+	public Structure getAllSongs() throws CloneNotSupportedException {
+		return (Structure)structure.clone();
 	}
 	
 	/**

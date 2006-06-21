@@ -13,6 +13,14 @@ public class StringTools {
 		return ret;
 	}
 	
+	public static String cutdown(String in, int maxlength) {
+		if (in.length() <= maxlength) {
+			return in;
+		} else {
+			return in.substring(0, maxlength-3) + "..."; //$NON-NLS-1$
+		}
+	}
+	
 	public static String repeat(String torepeat, int count) {
 		String ret = ""; //$NON-NLS-1$
 		for ( int i = 0; i < count; i++ ) {

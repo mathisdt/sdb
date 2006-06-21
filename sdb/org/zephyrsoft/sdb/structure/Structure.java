@@ -13,7 +13,7 @@ import org.zephyrsoft.util.*;
  *
  * @author   Mathis Dirksen-Thedens
  */
-public class Structure {
+public class Structure implements Cloneable {
 
 	private Vector songs = new Vector();
 	private int nextid = 1;
@@ -33,6 +33,14 @@ public class Structure {
 	 */
 	public Structure(GUI parent)  {
 		this.parentGUI = parent;
+	}
+	
+	public Object clone() throws CloneNotSupportedException {
+		Structure ret = new Structure(null);
+		for (int i = 0; i < songs.size(); i++) {
+			ret.addSong((Song)songs.elementAt(i));
+		}
+		return ret;
 	}
 	
 	public void sortByTitle() {

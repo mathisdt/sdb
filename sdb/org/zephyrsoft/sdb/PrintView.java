@@ -30,7 +30,9 @@ public class PrintView extends JFrame {
 	JToolBar toolbar = null;
 	JButton button_print = null;
 	JButton button_pdf = null;
+	JButton button_allpdf = null;
 	JButton button_close = null;
+	GUI parent = null;
 	
 	JPanel contentPane = null;
 	BorderLayout borderLayout = null;
@@ -44,9 +46,10 @@ public class PrintView extends JFrame {
 	java.awt.Font mycopyrightfont = null;
 	boolean myprintaccords = true;
 	
-	public PrintView(Song song, java.awt.Font titelfont, java.awt.Font textfont, java.awt.Font translatefont, java.awt.Font copyrightfont, boolean printAccords, boolean printing, int abstandLinks, int abstandOben) {
+	public PrintView(GUI gui, Song song, java.awt.Font titelfont, java.awt.Font textfont, java.awt.Font translatefont, java.awt.Font copyrightfont, boolean printAccords, boolean printing, int abstandLinks, int abstandOben) {
 		super(Messages.getString("PrintView.0") + song.getTitel()); //$NON-NLS-1$
 		
+		parent = gui;
 		mysong = song;
 		mytitelfont = titelfont;
 		mytextfont = textfont;
@@ -70,9 +73,11 @@ public class PrintView extends JFrame {
 		toolbar.setFloatable(false);
 		button_print = new JButton(Messages.getString("PrintView.3")); //$NON-NLS-1$
 		button_pdf = new JButton(Messages.getString("PrintView.4")); //$NON-NLS-1$
+		button_allpdf = new JButton(Messages.getString("PrintView.1")); //$NON-NLS-1$
 		button_close = new JButton(Messages.getString("PrintView.5")); //$NON-NLS-1$
 		toolbar.add(button_print);
 		toolbar.add(button_pdf);
+		toolbar.add(button_allpdf);
 		toolbar.add(button_close);
 		contentPane = new JPanel();
 		borderLayout = new BorderLayout();
@@ -240,6 +245,12 @@ public class PrintView extends JFrame {
 										 }
 									 }
 									);
+		button_allpdf.addActionListener(new ActionListener() {
+			 public void actionPerformed(ActionEvent e) {
+				 exportAll();
+			 }
+		 }
+		);
 		button_close.addActionListener(new ActionListener() {
 										   public void actionPerformed(ActionEvent e) {
 											   dispose();
@@ -256,6 +267,97 @@ public class PrintView extends JFrame {
 		// EVENT HANDLER ENDE ========================================
 		
 		show();
+	}
+	
+	protected void exportAll() {
+		int RAND = 60;
+		try {
+			// Fonts generieren:
+			BaseFont font_titel0 = BaseFont.createFont("res/" + mytitelfont.getFamily() + ".ttf", BaseFont.WINANSI, BaseFont.NOT_EMBEDDED); //$NON-NLS-1$ //$NON-NLS-2$
+			com.lowagie.text.Font font_titel = new com.lowagie.text.Font(font_titel0, mytitelfont.getSize(), getFontAttributes(mytitelfont));
+			BaseFont font_text0 = BaseFont.createFont("res/" + mytextfont.getFamily() + ".ttf", BaseFont.WINANSI, BaseFont.NOT_EMBEDDED); //$NON-NLS-1$ //$NON-NLS-2$
+			com.lowagie.text.Font font_text = new com.lowagie.text.Font(font_text0, mytextfont.getSize(), getFontAttributes(mytextfont));
+			BaseFont font_translate0 = BaseFont.createFont("res/" + mytranslatefont.getFamily() + ".ttf", BaseFont.WINANSI, BaseFont.NOT_EMBEDDED); //$NON-NLS-1$ //$NON-NLS-2$
+			com.lowagie.text.Font font_translate = new com.lowagie.text.Font(font_translate0, mytranslatefont.getSize(), getFontAttributes(mytranslatefont));
+			BaseFont font_copyright0 = BaseFont.createFont("res/" + mycopyrightfont.getFamily() + ".ttf", BaseFont.WINANSI, BaseFont.NOT_EMBEDDED); //$NON-NLS-1$ //$NON-NLS-2$
+			com.lowagie.text.Font font_copyright = new com.lowagie.text.Font(font_copyright0, mycopyrightfont.getSize(), getFontAttributes(mycopyrightfont));
+			
+			// creation of the document with a certain size and certain margins
+			Document document = new Document(PageSize.A4, 50, 50, 50, 50);
+			// wohin soll geschrieben werden?
+			String name = ""; //$NON-NLS-1$
+			JFileChooser chooser = new JFileChooser();
+			chooser.setFileFilter(new CustomFileFilter(".pdf", Messages.getString("PrintView.17"))); //$NON-NLS-1$ //$NON-NLS-2$
+			int returnVal = chooser.showSaveDialog(this);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				name = chooser.getSelectedFile().getAbsolutePath();
+			}
+			if (name == null || name.equals("")) { //$NON-NLS-1$
+				name = "allsongs.pdf"; //$NON-NLS-1$
+			}
+			if (!name.endsWith(".pdf")) { //$NON-NLS-1$
+				name += ".pdf"; //$NON-NLS-1$
+			}
+			File file = new File(name);
+			// creation of the different writers
+			PdfWriter.getInstance(document, new FileOutputStream(file));
+			
+			// we open the document for writing
+			document.open();
+			
+			Paragraph par = null;
+			String rest = null;
+			Structure allsongs1 = parent.getAllSongs();
+			allsongs1.sortByTitle();
+			Vector allsongs = allsongs1.getSongs();
+			par = new Paragraph("", font_titel); //$NON-NLS-1$
+			par.add(new Phrase("Verzeichnis")); //$NON-NLS-1$
+			document.add(par);
+		    par = new Paragraph("", font_text); //$NON-NLS-1$
+		    par.add(new Phrase("\n")); //$NON-NLS-1$
+			for (int i = 0; i < allsongs.size(); i++) {
+				Song asong = (Song)allsongs.elementAt(i);
+				par.add(new Phrase(asong.getTitel() + "\n")); //$NON-NLS-1$
+			}
+			document.add(par);
+			document.newPage();
+			for (int i = 0; i < allsongs.size(); i++) {
+				Song asong = (Song)allsongs.elementAt(i);
+				par = new Paragraph("", font_titel); //$NON-NLS-1$
+				par.add(new Phrase(asong.getTitel()));
+				document.add(par);
+				rest = asong.getTextAndAccordsInFont(mytextfont, true);
+				while (rest.length() > 0 && rest.indexOf("[") > -1) { //$NON-NLS-1$
+				    int st = rest.indexOf("["); //$NON-NLS-1$
+				    int en = rest.indexOf("]", st); //$NON-NLS-1$
+				    if (en == -1) {
+				        en = rest.length();
+				        rest += "]"; //$NON-NLS-1$
+				    }
+				    String thistext = rest.substring(0, st);
+				    String thistranslate = rest.substring(st+1, en);
+				    par = new Paragraph("", font_text); //$NON-NLS-1$
+					par.add(new Phrase(thistext));
+					document.add(par);
+					par = new Paragraph("", font_translate); //$NON-NLS-1$
+					par.add(new Phrase(thistranslate));
+					document.add(par);
+					rest = rest.substring(en+1);
+				}
+				par = new Paragraph("", font_text); //$NON-NLS-1$
+				par.add(new Phrase(rest));
+				document.add(par);
+				par = new Paragraph("\n\n", font_copyright); //$NON-NLS-1$
+				par.add(new Phrase(asong.getCopyright()));
+				document.add(par);
+				document.newPage();
+			}
+			
+			document.close();
+		} catch (Exception ex) {
+			System.out.println("CAUGHT:"); //$NON-NLS-1$
+			ex.printStackTrace();
+		}
 	}
 	
 	protected void exportThis() {
@@ -281,7 +383,6 @@ public class PrintView extends JFrame {
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				name = chooser.getSelectedFile().getAbsolutePath();
 			}
-			System.out.println(name);
 			if (name == null || name.equals("")) { //$NON-NLS-1$
 				name = "song.pdf"; //$NON-NLS-1$
 			}
@@ -291,17 +392,6 @@ public class PrintView extends JFrame {
 			File file = new File(name);
 			// creation of the different writers
 			PdfWriter.getInstance(document, new FileOutputStream(file));
-			
-			// we add some meta information to the document
-			//document.addAuthor("Der Heilige Geist");
-			//document.addSubject("Worship");
-			
-			// we define a header and a footer
-			//HeaderFooter header = new HeaderFooter(new Phrase("This is a header."), false);
-			//HeaderFooter footer = new HeaderFooter(new Phrase("This is page "), new Phrase("."));
-			//footer.setAlignment(Element.ALIGN_CENTER);
-			//document.setHeader(header);
-			//document.setFooter(footer);
 			
 			// we open the document for writing
 			document.open();
@@ -354,7 +444,7 @@ public class PrintView extends JFrame {
 	protected void printThis() {
 		int RAND = 0;
 		try {
-			PrintView temp = new PrintView((Song)mysong.clone(), mytitelfont, mytextfont, mytranslatefont, mycopyrightfont, myprintaccords, true, RAND, RAND);
+			PrintView temp = new PrintView(parent, (Song)mysong.clone(), mytitelfont, mytextfont, mytranslatefont, mycopyrightfont, myprintaccords, true, RAND, RAND);
 			PrintUtilities.printComponent(temp.getContent());
 			temp.dispose();
 		} catch (Exception ex) {

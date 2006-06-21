@@ -11,7 +11,5 @@ NEUE FUNKTIONEN / VERBESSERUNGEN:
 - Word-Dokumente importieren, auch ganzes Verzeichnis
 - kleine Ansicht für das Scrollen + Vorschau
 - JPG / PNG als Hintergrundbild
-  <1.14>
 - Druck auf mehrere Seiten optimieren! evtl. die *PDF*-Datei drucken?
 - Lieder transponieren (ist fast fertig)
-  <1.15>
