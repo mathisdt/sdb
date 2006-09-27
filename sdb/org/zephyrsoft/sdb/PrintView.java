@@ -23,7 +23,7 @@ import com.lowagie.text.pdf.*;
 
 public class PrintView extends JFrame {
 
-	public static int ANZAHL_KORREKTUR_LEERZEICHEN = 10;
+	//public static int ANZAHL_KORREKTUR_LEERZEICHEN = 10;
 	
 	private boolean debug = false;
 	
@@ -90,7 +90,7 @@ public class PrintView extends JFrame {
 		back.setLayout(null);
 		
 		// Text draufschreiben:
-		JTextArea titel = new JTextArea(song.getTitel() + StringTools.repeat(" ", ANZAHL_KORREKTUR_LEERZEICHEN)); //$NON-NLS-1$
+		JTextArea titel = new JTextArea(song.getTitel()); // + StringTools.repeat(" ", ANZAHL_KORREKTUR_LEERZEICHEN)); //$NON-NLS-1$
 		titel.setEditable(false);
 		JTextPane text = new JTextPane();
 		if ( printAccords ) {
@@ -323,8 +323,8 @@ public class PrintView extends JFrame {
 			document.newPage();
 			for (int i = 0; i < allsongs.size(); i++) {
 				Song asong = (Song)allsongs.elementAt(i);
-				par = new Paragraph("", font_titel); //$NON-NLS-1$
-				par.add(new Phrase(asong.getTitel()));
+				par = new Paragraph(); //$NON-NLS-1$
+				par.add(new Chunk(asong.getTitel() + "\n", font_titel));
 				document.add(par);
 				rest = asong.getTextAndAccordsInFont(mytextfont, true);
 				while (rest.length() > 0 && rest.indexOf("[") > -1) { //$NON-NLS-1$
@@ -336,19 +336,20 @@ public class PrintView extends JFrame {
 				    }
 				    String thistext = rest.substring(0, st);
 				    String thistranslate = rest.substring(st+1, en);
-				    par = new Paragraph("", font_text); //$NON-NLS-1$
-					par.add(new Phrase(thistext));
-					document.add(par);
-					par = new Paragraph("", font_translate); //$NON-NLS-1$
-					par.add(new Phrase(thistranslate));
+				    par = new Paragraph(); //$NON-NLS-1$
+					par.add(new Chunk(thistext, font_text));
+					if (!thistranslate.equals("")) {
+						par.add(new Chunk(thistranslate, font_translate));
+					}
+					par.setSpacingBefore(1f);
 					document.add(par);
 					rest = rest.substring(en+1);
 				}
-				par = new Paragraph("", font_text); //$NON-NLS-1$
-				par.add(new Phrase(rest));
+				par = new Paragraph(); //$NON-NLS-1$
+				par.add(new Chunk(rest, font_text));
 				document.add(par);
-				par = new Paragraph("\n\n", font_copyright); //$NON-NLS-1$
-				par.add(new Phrase(asong.getCopyright()));
+				par = new Paragraph(); //$NON-NLS-1$
+				par.add(new Chunk("\n\n" + asong.getCopyright(), font_copyright));
 				document.add(par);
 				document.newPage();
 			}
@@ -399,6 +400,7 @@ public class PrintView extends JFrame {
 			par.add(new Phrase(mysong.getTitel()));
 			document.add(par);
 			String rest = mysong.getTextAndAccordsInFont(mytextfont, true);
+			
 			while (rest.length() > 0 && rest.indexOf("[") > -1) { //$NON-NLS-1$
 			    int st = rest.indexOf("["); //$NON-NLS-1$
 			    int en = rest.indexOf("]", st); //$NON-NLS-1$
@@ -411,9 +413,11 @@ public class PrintView extends JFrame {
 			    par = new Paragraph("", font_text); //$NON-NLS-1$
 				par.add(new Phrase(thistext));
 				document.add(par);
-				par = new Paragraph("", font_translate); //$NON-NLS-1$
-				par.add(new Phrase(thistranslate));
-				document.add(par);
+				if (!thistranslate.equals("")) {
+					par = new Paragraph("", font_translate); //$NON-NLS-1$
+					par.add(new Phrase(thistranslate));
+					document.add(par);
+				}
 				rest = rest.substring(en+1);
 			}
 			par = new Paragraph("", font_text); //$NON-NLS-1$

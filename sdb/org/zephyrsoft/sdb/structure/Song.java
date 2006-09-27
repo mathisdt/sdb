@@ -249,6 +249,9 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 	}
 	
 	public String getTextAndAccordsInFont(Font font, boolean printing) {
+//		 DEBUG:
+		System.out.println("***1*** "+text);
+		
 		String dtext = new String(text); 
 		dtext = StringTools.replace(dtext, GUI.SEPARATOR, ""); //$NON-NLS-1$
 		String my = ""; //$NON-NLS-1$
@@ -262,12 +265,14 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 			before = new String(line);
 			line = dtext.substring(pos, dtext.indexOf("\n", pos)); //$NON-NLS-1$
 			pos = dtext.indexOf("\n", pos) + 1; // nach Zeilensprung weitersuchen //$NON-NLS-1$
-			//System.out.println("isTextLine = " + isTextLine(line) + " - " + line);
+			while (line.lastIndexOf("\n") >=0 && line.lastIndexOf("\n") == line.length()-1) {
+				line = line.substring(line.length()-1);
+			}
 			if ( isTextLine(line) ) {
 				if ( !line.trim().equals("") ) { //$NON-NLS-1$
 					String[] back = correctSpaces(line, before, font, printing);
 					// Akkorde hinzufügen
-					if ( !isTextLine(back[1]) && !isTranslateLine(back[1]) ) {
+					if ( !isTextLine(back[1]) && !isTranslateLine(back[1]) && !isEmpty(back[1]) ) {
 						my += back[1] + "\n"; //$NON-NLS-1$
 					}
 					// Text dazu
@@ -280,7 +285,19 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 			}
 		}
 		
+		// DEBUG:
+		System.out.println("***2*** "+my);
+		
 		return my;
+	}
+	
+	public static boolean isEmpty(String arg) {
+		arg = StringTools.replace(arg, " ", "");
+		if (arg.equals("")) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	// Variante für mehrere Folien:
@@ -424,8 +441,9 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 		
 		// Rückgabewert zusammenstellen:
 		String[] back = new String[2];
-		back[0] = ( textbis[textbis.length - 1].length() > textzeile.length() ? textbis[textbis.length - 1] + StringTools.repeat(" ", PrintView.ANZAHL_KORREKTUR_LEERZEICHEN) : textzeile + StringTools.repeat(" ", PrintView.ANZAHL_KORREKTUR_LEERZEICHEN) ); //$NON-NLS-1$ //$NON-NLS-2$
-		back[1] = ret + StringTools.repeat(" ", 10); //$NON-NLS-1$
+		back[0] = ( textbis[textbis.length - 1].length() > textzeile.length() ? textbis[textbis.length - 1] : textzeile);
+		//back[0] = ( textbis[textbis.length - 1].length() > textzeile.length() ? textbis[textbis.length - 1] + StringTools.repeat(" ", PrintView.ANZAHL_KORREKTUR_LEERZEICHEN) : textzeile + StringTools.repeat(" ", PrintView.ANZAHL_KORREKTUR_LEERZEICHEN) ); //$NON-NLS-1$ //$NON-NLS-2$
+		back[1] = ret; // + StringTools.repeat(" ", 10); //$NON-NLS-1$
 		
 		return back;
 	}
@@ -435,7 +453,7 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 	}
 	
 	public static boolean isTranslateLine(String line) {
-	    return line.trim().startsWith("["); //$NON-NLS-1$
+	    return percentOfSpaces(line) < 50 && line.trim().startsWith("["); //$NON-NLS-1$
 	}
 	
 	private static double percentOfSpaces(String in) {
