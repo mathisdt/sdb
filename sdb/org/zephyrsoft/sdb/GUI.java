@@ -967,7 +967,7 @@ public class GUI extends JFrame {
 			        bis1++;
 			    }
 		    } catch(Exception ex) {
-		        ex.printStackTrace();
+		        //ex.printStackTrace();
 		    }
 		    doc.setCharacterAttributes(von1, bis1-von1, doc.getStyle("chord"), true); //$NON-NLS-1$
 		}

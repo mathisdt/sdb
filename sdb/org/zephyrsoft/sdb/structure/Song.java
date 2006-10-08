@@ -249,12 +249,12 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 	}
 	
 	public String getTextAndAccordsInFont(Font font, boolean printing) {
-//		 DEBUG:
-		System.out.println("***1*** "+text);
+//		DEBUG:
+//		System.out.println("***1*** "+text);
 		
 		String dtext = new String(text); 
 		dtext = StringTools.replace(dtext, GUI.SEPARATOR, ""); //$NON-NLS-1$
-		String my = ""; //$NON-NLS-1$
+		String my = "\n"; //$NON-NLS-1$
 		String before = ""; //$NON-NLS-1$
 		String line = ""; //$NON-NLS-1$
 		int pos = 0;
@@ -285,8 +285,8 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 			}
 		}
 		
-		// DEBUG:
-		System.out.println("***2*** "+my);
+//		DEBUG:
+//		System.out.println("***2*** "+my);
 		
 		return my;
 	}
