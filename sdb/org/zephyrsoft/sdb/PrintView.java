@@ -396,11 +396,10 @@ public class PrintView extends JFrame {
 			
 			// we open the document for writing
 			document.open();
-			Paragraph par = new Paragraph("", font_titel); //$NON-NLS-1$
-			par.add(new Phrase(mysong.getTitel()));
+			Paragraph par = new Paragraph(); //$NON-NLS-1$
+			par.add(new Chunk(mysong.getTitel() + "\n", font_titel));
 			document.add(par);
 			String rest = mysong.getTextAndAccordsInFont(mytextfont, true);
-			
 			while (rest.length() > 0 && rest.indexOf("[") > -1) { //$NON-NLS-1$
 			    int st = rest.indexOf("["); //$NON-NLS-1$
 			    int en = rest.indexOf("]", st); //$NON-NLS-1$
@@ -410,21 +409,20 @@ public class PrintView extends JFrame {
 			    }
 			    String thistext = rest.substring(0, st);
 			    String thistranslate = rest.substring(st+1, en);
-			    par = new Paragraph("", font_text); //$NON-NLS-1$
-				par.add(new Phrase(thistext));
-				document.add(par);
+			    par = new Paragraph(); //$NON-NLS-1$
+				par.add(new Chunk(thistext, font_text));
 				if (!thistranslate.equals("")) {
-					par = new Paragraph("", font_translate); //$NON-NLS-1$
-					par.add(new Phrase(thistranslate));
-					document.add(par);
+					par.add(new Chunk(thistranslate, font_translate));
 				}
+				par.setSpacingBefore(1f);
+				document.add(par);
 				rest = rest.substring(en+1);
 			}
-			par = new Paragraph("", font_text); //$NON-NLS-1$
-			par.add(new Phrase(rest));
+			par = new Paragraph(); //$NON-NLS-1$
+			par.add(new Chunk(rest, font_text));
 			document.add(par);
-			par = new Paragraph("\n\n", font_copyright); //$NON-NLS-1$
-			par.add(new Phrase(mysong.getCopyright()));
+			par = new Paragraph(); //$NON-NLS-1$
+			par.add(new Chunk("\n\n" + mysong.getCopyright(), font_copyright));
 			document.add(par);
 			document.close();
 		} catch (Exception ex) {
