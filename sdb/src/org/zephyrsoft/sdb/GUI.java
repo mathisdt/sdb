@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 
+import javax.imageio.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
@@ -38,6 +39,10 @@ public class GUI extends JFrame {
 	
 	private Options options = null;
 	private static String options_filename = "SDB.options"; //$NON-NLS-1$
+	
+	private Image logoImage = null;
+	private ImagePanel logoForBack = null;
+	private ImagePanel logoForOptions = null;
 	
 	public KeyListener globalKeyListener = null;
 	
@@ -340,6 +345,12 @@ public class GUI extends JFrame {
 			options = loadOptions();
 		} catch (Exception ex) {
 			options = getDefaultOptions();
+		}
+		
+		try {
+			loadLogo((String)getOptions().get("logo")); //$NON-NLS-1$
+		} catch (IOException ioe) {
+			// nichts tun
 		}
 		
 		// EVENT HANDLER START =======================================
@@ -802,6 +813,50 @@ public class GUI extends JFrame {
         }
 	}
 	
+	public void loadLogo(String logoname) throws IOException {
+		logoImage = null;
+		// Logo vorhanden?
+		if (logoname!=null && !logoname.equals("")) { //$NON-NLS-1$
+			File logofile = new File(logoname);
+			// Logo-Datei lesbar?
+			if (logofile.isFile() && logofile.canRead()) {
+				Image logo = ImageIO.read(logofile);
+				GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+				GraphicsDevice[] devices = env.getScreenDevices();
+				GraphicsDevice device = devices[devices.length - 1];
+				Dimension dim = new Dimension(device.getDisplayMode().getWidth(), device.getDisplayMode().getHeight());
+				double widthRatio = dim.getWidth() / logo.getWidth(null);
+				double heightRatio = dim.getHeight() / logo.getHeight(null);
+				int targetHeight;
+				int targetWidth;
+				if (widthRatio < heightRatio) {
+					targetHeight = (int)(logo.getHeight(null) * widthRatio);
+					targetWidth = (int)(logo.getWidth(null) * widthRatio);
+				} else {
+					targetHeight = (int)(logo.getHeight(null) * heightRatio);
+					targetWidth = (int)(logo.getWidth(null) * heightRatio);
+				}
+				logoImage = logo.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+				if (logoForBack==null) {
+					logoForBack = new ImagePanel((Color)getOptions().get("bgco")); //$NON-NLS-1$
+				}
+				logoForBack.setImage(logoImage);
+				if (logoForOptions==null) {
+					logoForOptions = new ImagePanel((Color)getOptions().get("bgco")); //$NON-NLS-1$
+				}
+				logoForOptions.setImage(logoImage);
+			}
+		}
+	}
+	
+	public ImagePanel getLogoForBack() {
+		return logoForBack;
+	}
+	
+	public ImagePanel getLogoForOptions() {
+		return logoForOptions;
+	}
+	
 	public void registerGKL(Component comp) {
 		if (comp instanceof Container) {
 			comp.addKeyListener(globalKeyListener);
@@ -825,7 +880,7 @@ public class GUI extends JFrame {
 	    // jetzt Dateiauswahl anzeigen:
 		JFileChooser pChooser = new JFileChooser();
 		pChooser.setDialogTitle(Messages.getString("GUI.12")); //$NON-NLS-1$
-		org.zephyrsoft.util.CustomFileFilter filter = new org.zephyrsoft.util.CustomFileFilter(".rtf", Messages.getString("GUI.13")); //$NON-NLS-1$ //$NON-NLS-2$
+		org.zephyrsoft.util.CustomFileFilter filter = new org.zephyrsoft.util.CustomFileFilter(Messages.getString("GUI.13"), new String[] {".rtf"}); //$NON-NLS-1$ //$NON-NLS-2$
 		pChooser.addChoosableFileFilter(filter);
 		int iValue = pChooser.showOpenDialog(getThis());
 		
@@ -881,7 +936,7 @@ public class GUI extends JFrame {
 	    // jetzt Dateiauswahl anzeigen:
 		JFileChooser pChooser = new JFileChooser();
 		pChooser.setDialogTitle(Messages.getString("GUI.15")); //$NON-NLS-1$
-		org.zephyrsoft.util.CustomFileFilter filter = new org.zephyrsoft.util.CustomFileFilter(".rtf", ""); //$NON-NLS-1$ //$NON-NLS-2$
+		org.zephyrsoft.util.CustomFileFilter filter = new org.zephyrsoft.util.CustomFileFilter("", new String[] {".rtf"}); //$NON-NLS-1$ //$NON-NLS-2$
 		pChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 		int iValue = pChooser.showOpenDialog(getThis());
 		
@@ -1241,7 +1296,7 @@ public class GUI extends JFrame {
 		// jetzt Dateiauswahl anzeigen:
 		JFileChooser pChooser = new JFileChooser();
 		pChooser.setDialogTitle(Messages.getString("GUI.79")); //$NON-NLS-1$
-		org.zephyrsoft.util.CustomFileFilter filter = new org.zephyrsoft.util.CustomFileFilter(".sdb", Messages.getString("GUI.81")); //$NON-NLS-1$ //$NON-NLS-2$
+		org.zephyrsoft.util.CustomFileFilter filter = new org.zephyrsoft.util.CustomFileFilter(Messages.getString("GUI.81"), new String[] {".sdb"}); //$NON-NLS-1$ //$NON-NLS-2$
 		pChooser.addChoosableFileFilter(filter);
 		int iValue = pChooser.showOpenDialog(getThis());
 		
@@ -1296,7 +1351,7 @@ public class GUI extends JFrame {
 		// jetzt Dateiauswahl anzeigen:
 		JFileChooser pChooser = new JFileChooser();
 		pChooser.setDialogTitle(Messages.getString("GUI.85")); //$NON-NLS-1$
-		org.zephyrsoft.util.CustomFileFilter filter = new org.zephyrsoft.util.CustomFileFilter(".sdb", Messages.getString("GUI.87")); //$NON-NLS-1$ //$NON-NLS-2$
+		org.zephyrsoft.util.CustomFileFilter filter = new org.zephyrsoft.util.CustomFileFilter(Messages.getString("GUI.87"), new String[] {".sdb"}); //$NON-NLS-1$ //$NON-NLS-2$
 		pChooser.addChoosableFileFilter(filter);
 		int iValue = pChooser.showSaveDialog(this);
 		
@@ -1521,9 +1576,11 @@ public class GUI extends JFrame {
 	public void beamerGuiToFront() {
 		if (beamergui != null) {
 			beamergui.toFront();
+			beamergui.requestFocus();
 		} else {
 			beamergui = new BeamerGUI(this);
 			beamergui.toFront();
+			beamergui.requestFocus();
 		}
 	}
 	
@@ -1557,6 +1614,7 @@ public class GUI extends JFrame {
 		ret.put("bst", new Boolean(true)); //$NON-NLS-1$
 		ret.put("zt", new Boolean(true)); //$NON-NLS-1$
 		ret.put("mf", new Boolean(false)); //$NON-NLS-1$
+		ret.put("logo", ""); //$NON-NLS-1$ //$NON-NLS-2$
 		return ret;
 	}
 	

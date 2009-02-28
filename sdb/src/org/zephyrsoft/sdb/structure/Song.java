@@ -51,7 +51,7 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 	}
 	
 	public void importTextFromClipboard(Frame parent) {
-		// Liest den Text der Zwischenablage und berücksichtigt dabei die proportionale Schrift.
+		// Liest den Text der Zwischenablage und berï¿½cksichtigt dabei die proportionale Schrift.
 		try {
 			// Zwischenablage lesen
 			Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -64,9 +64,9 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 						System.out.println(clipcontent);
 						System.out.println("= ENDE =============");
 			*/ 
-			// Font wählen lassen
+			// Font wï¿½hlen lassen
 			Font basefont = new Font("Arial", Font.PLAIN, 18); //$NON-NLS-1$
-//			HSFontSelector fontsel = new HSFontSelector(parent, "Bitte Eingabeschrift wählen!", basefont);
+//			HSFontSelector fontsel = new HSFontSelector(parent, "Bitte Eingabeschrift wï¿½hlen!", basefont);
 //			Font font = fontsel.showDialog();
 //			if ( font == null ) {
 //				font = basefont;
@@ -75,7 +75,7 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 			
 			
 			// jetzt zeilenweise umrechnen in Proportionalschrift!
-			String my = ""; // später Songtext! //$NON-NLS-1$
+			String my = ""; // spï¿½ter Songtext! //$NON-NLS-1$
 			String before = ""; //$NON-NLS-1$
 			String line = ""; //$NON-NLS-1$
 			int pos = 0;
@@ -90,7 +90,7 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 				if ( isTextLine(line) ) {
 					if ( !line.trim().equals("") ) { //$NON-NLS-1$
 						String[] back = correctSpaces2(line, before, font);
-						// Akkorde hinzufügen
+						// Akkorde hinzufï¿½gen
 						if ( !isTextLine(back[1]) ) {
 							my += back[1] + "\n"; //$NON-NLS-1$
 						}
@@ -136,7 +136,7 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 			int zeichenvorakkord = akkordzeile.indexOf((String)akkorde[i], pos);
 			pos = zeichenvorakkord + ((String)akkorde[i]).length();
 			int pixelvorakkord = Utils.getPixelLengthInFont(akkordzeile.substring(0, zeichenvorakkord), font, false);
-			// Textzeile durchgehen, bis die Textlänge pixelvorakkord gerade noch nicht übertrifft:
+			// Textzeile durchgehen, bis die Textlï¿½nge pixelvorakkord gerade noch nicht ï¿½bertrifft:
 			int textpixel = 0;
 			while ( textpixel < pixelvorakkord ) {
 				pos2++;
@@ -157,12 +157,12 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 			if ( pos2 > 0 ) {
 				pos2--;
 			}
-			// bisherige Akkordzeile mit Leerzeichen auffüllen und Akkord anfügen:
+			// bisherige Akkordzeile mit Leerzeichen auffï¿½llen und Akkord anfï¿½gen:
 			erg_akkordzeile += StringTools.repeat(" ", pos2 - erg_akkordzeile.length()) + akkorde[i]; //$NON-NLS-1$
 			
 		}
 		
-		// Rückgabewert zusammenstellen:
+		// Rï¿½ckgabewert zusammenstellen:
 		String[] back = new String[2];
 		back[0] = textzeile;
 		back[1] = erg_akkordzeile;
@@ -171,12 +171,12 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 	}
 	
 	/** immer nur ein Leerzeichen zwischen den Worten,
-	 *  am Zeilenanfang aber mehrere erlauben zum Einrücken
+	 *  am Zeilenanfang aber mehrere erlauben zum Einrï¿½cken
 	 */
 	private String correctspacesinthemiddle(String my) {
 	    int pos1 = my.indexOf("  "); //$NON-NLS-1$
 		while (pos1 >= 0) {
-		    // Leerzeichen vor pos1 zählen
+		    // Leerzeichen vor pos1 zï¿½hlen
 		    int blanks = 0;
 		    try {
 			    while (my.substring(pos1-blanks-1,pos1-blanks).equals(" ")) { //$NON-NLS-1$
@@ -227,7 +227,7 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 		return correctspacesinthemiddle(my);
 	}
 	
-	// Variante für mehrere Folien:
+	// Variante fï¿½r mehrere Folien:
 	public String getOnlyText_Foil(int foil) {
 		String dtext = getFoil(foil); 
 		String my = ""; //$NON-NLS-1$
@@ -265,13 +265,13 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 			before = new String(line);
 			line = dtext.substring(pos, dtext.indexOf("\n", pos)); //$NON-NLS-1$
 			pos = dtext.indexOf("\n", pos) + 1; // nach Zeilensprung weitersuchen //$NON-NLS-1$
-			while (line.lastIndexOf("\n") >=0 && line.lastIndexOf("\n") == line.length()-1) {
+			while (line.lastIndexOf("\n") >=0 && line.lastIndexOf("\n") == line.length()-1) { //$NON-NLS-1$ //$NON-NLS-2$
 				line = line.substring(line.length()-1);
 			}
 			if ( isTextLine(line) ) {
 				if ( !line.trim().equals("") ) { //$NON-NLS-1$
 					String[] back = correctSpaces(line, before, font, printing);
-					// Akkorde hinzufügen
+					// Akkorde hinzufï¿½gen
 					if ( !isTextLine(back[1]) && !isTranslateLine(back[1]) && !isEmpty(back[1]) ) {
 						my += back[1] + "\n"; //$NON-NLS-1$
 					}
@@ -292,15 +292,15 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 	}
 	
 	public static boolean isEmpty(String arg) {
-		arg = StringTools.replace(arg, " ", "");
-		if (arg.equals("")) {
+		arg = StringTools.replace(arg, " ", ""); //$NON-NLS-1$ //$NON-NLS-2$
+		if (arg.equals("")) { //$NON-NLS-1$
 			return true;
 		} else {
 			return false;
 		}
 	}
 	
-	// Variante für mehrere Folien:
+	// Variante fï¿½r mehrere Folien:
 	public String getTextAndAccordsInFont_Foil(Font font, boolean printing, int foil) {
 		String dtext = getFoil(foil); 
 		String my = ""; //$NON-NLS-1$
@@ -318,7 +318,7 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 			if ( isTextLine(line) ) {
 				if ( !line.trim().equals("") ) { //$NON-NLS-1$
 					String[] back = correctSpaces(line, before, font, printing);
-					// Akkorde hinzufügen
+					// Akkorde hinzufï¿½gen
 					if ( !isTextLine(back[1]) ) {
 						my += back[1] + "\n"; //$NON-NLS-1$
 					}
@@ -413,7 +413,7 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 		}
 		Object[] akkorde = akk_temp2.toArray();
 		
-		// Text aufsplitten in Stücke, die bis zum jeweiligen Akkord führen (vom Anfang der Zeile)
+		// Text aufsplitten in Stï¿½cke, die bis zum jeweiligen Akkord fï¿½hren (vom Anfang der Zeile)
 		String[] textbis = new String[akkorde.length];
 		pos = 0;
 		for ( int i = 0; i < akkorde.length; i++ ) {
@@ -439,7 +439,7 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 			ret += exp + akkorde[i];
 		}
 		
-		// Rückgabewert zusammenstellen:
+		// Rï¿½ckgabewert zusammenstellen:
 		String[] back = new String[2];
 		back[0] = ( textbis[textbis.length - 1].length() > textzeile.length() ? textbis[textbis.length - 1] : textzeile);
 		//back[0] = ( textbis[textbis.length - 1].length() > textzeile.length() ? textbis[textbis.length - 1] + StringTools.repeat(" ", PrintView.ANZAHL_KORREKTUR_LEERZEICHEN) : textzeile + StringTools.repeat(" ", PrintView.ANZAHL_KORREKTUR_LEERZEICHEN) ); //$NON-NLS-1$ //$NON-NLS-2$
@@ -546,21 +546,21 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 	}
 	
 	public int compare(Object o1, Object o2) throws ClassCastException {
-		// hier werden zwei Objekte miteinander verglichen (primär der Titel)
+		// hier werden zwei Objekte miteinander verglichen (primï¿½r der Titel)
 		int ret = 0;
 		try {
 			Song comp1 = (Song)o1;
 			Song comp2 = (Song)o2;
 			String titel1 = comp1.getTitel().toLowerCase();
 			String titel2 = comp2.getTitel().toLowerCase();
-			titel1 = StringTools.replace(titel1, "ä", "ae"); //$NON-NLS-1$ //$NON-NLS-2$
-			titel1 = StringTools.replace(titel1, "ö", "oe"); //$NON-NLS-1$ //$NON-NLS-2$
-			titel1 = StringTools.replace(titel1, "ü", "ue"); //$NON-NLS-1$ //$NON-NLS-2$
-			titel1 = StringTools.replace(titel1, "ß", "ss"); //$NON-NLS-1$ //$NON-NLS-2$
-			titel2 = StringTools.replace(titel2, "ä", "ae"); //$NON-NLS-1$ //$NON-NLS-2$
-			titel2 = StringTools.replace(titel2, "ö", "oe"); //$NON-NLS-1$ //$NON-NLS-2$
-			titel2 = StringTools.replace(titel2, "ü", "ue"); //$NON-NLS-1$ //$NON-NLS-2$
-			titel2 = StringTools.replace(titel2, "ß", "ss"); //$NON-NLS-1$ //$NON-NLS-2$
+			titel1 = StringTools.replace(titel1, "ï¿½", "ae"); //$NON-NLS-1$ //$NON-NLS-2$
+			titel1 = StringTools.replace(titel1, "ï¿½", "oe"); //$NON-NLS-1$ //$NON-NLS-2$
+			titel1 = StringTools.replace(titel1, "ï¿½", "ue"); //$NON-NLS-1$ //$NON-NLS-2$
+			titel1 = StringTools.replace(titel1, "ï¿½", "ss"); //$NON-NLS-1$ //$NON-NLS-2$
+			titel2 = StringTools.replace(titel2, "ï¿½", "ae"); //$NON-NLS-1$ //$NON-NLS-2$
+			titel2 = StringTools.replace(titel2, "ï¿½", "oe"); //$NON-NLS-1$ //$NON-NLS-2$
+			titel2 = StringTools.replace(titel2, "ï¿½", "ue"); //$NON-NLS-1$ //$NON-NLS-2$
+			titel2 = StringTools.replace(titel2, "ï¿½", "ss"); //$NON-NLS-1$ //$NON-NLS-2$
 			
 			/*
 			if ( comp1.getID() == comp2.getID() ) {

@@ -4,13 +4,13 @@ import java.io.*;
 
 import javax.swing.filechooser.FileFilter;
 
-/** FileFilter für Dateien mit beliebigen Endungen. */
+/** FileFilter fï¿½r Dateien mit beliebigen Endungen. */
 public class CustomFileFilter extends javax.swing.filechooser.FileFilter implements java.io.FileFilter {
 	
-	private String extension = ""; //$NON-NLS-1$
+	private String[] extension = new String[] {};
 	private String description = ""; //$NON-NLS-1$
 	
-	public CustomFileFilter(String extension, String description) {
+	public CustomFileFilter(String description, String[] extension) {
 		this.extension = extension;
 		this.description = description;
 	}
@@ -20,12 +20,12 @@ public class CustomFileFilter extends javax.swing.filechooser.FileFilter impleme
 		if (f.isDirectory()) {
 			return true;
 		}
-
-		if ( f.getName().toLowerCase().endsWith(extension) ) {
-			return true;
-		} else {
-			return false;
+		for (int i = 0; i < extension.length; i++) {
+			if ( f.getName().toLowerCase().endsWith(extension[i]) ) {
+				return true;
+			}
 		}
+		return false;
 	}
 
 	public String getDescription() {

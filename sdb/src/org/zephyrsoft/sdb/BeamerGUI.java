@@ -5,6 +5,7 @@ import java.awt.dnd.*;
 import java.awt.event.*;
 import java.io.*;
 
+import javax.imageio.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
@@ -33,6 +34,8 @@ public class BeamerGUI extends JFrame {
 	Font textfont = null;
 	Font translatefont = null;
 	Font copyrightfont = null;
+	
+	String logoname = null;
 	
 	// DND
 	private DGListener dglistener;
@@ -71,6 +74,7 @@ public class BeamerGUI extends JFrame {
 	JButton nextButton = null;
 	JButton previousButton = null;
 	JButton emptyButton = null;
+	JButton logoButton = null;
 	JButton nextFoilButton = null;
 	JButton previousFoilButton = null;
 	JComboBox goFoilBox = null;
@@ -159,6 +163,7 @@ public class BeamerGUI extends JFrame {
 		startFoilBox = new JComboBox();
 		startFoilBox.setEditable(false);
 		emptyButton = new JButton(Messages.getString("BeamerGUI.28")); //$NON-NLS-1$
+		logoButton = new JButton(Messages.getString("BeamerGUI.1")); //$NON-NLS-1$
 		hidePresentationButton = new JButton(Messages.getString("BeamerGUI.29")); //$NON-NLS-1$
 		
 		if (!((Boolean)parent.getOptions().get("mf")).booleanValue()) { //$NON-NLS-1$
@@ -229,6 +234,7 @@ public class BeamerGUI extends JFrame {
 		foils2.add(startFoilBox);
 		foils2.add(startFoilButton);
 		reul.add(foils2);
+		reul.add(logoButton);
 		reul.add(emptyButton);
 		reul.add(new JLabel(" ")); //$NON-NLS-1$
 		reul.add(previousButton);
@@ -389,6 +395,7 @@ public class BeamerGUI extends JFrame {
 		startFoilButton.addKeyListener(myKeyListener);
 		startFoilBox.addKeyListener(myKeyListener);
 		emptyButton.addKeyListener(myKeyListener);
+		logoButton.addKeyListener(myKeyListener);
 		hidePresentationButton.addKeyListener(myKeyListener);
 		
 		upButton.addActionListener(
@@ -516,6 +523,13 @@ public class BeamerGUI extends JFrame {
 				}
 			}
 		);
+		logoButton.addActionListener(
+			new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					do_showlogo();
+				}
+			}
+		);
 		this.addWindowListener(
 			new WindowAdapter() {
 				public void windowClosing(WindowEvent e) {
@@ -607,7 +621,7 @@ public class BeamerGUI extends JFrame {
 		try {
 			int selected_was_list = list.getSelectedIndex();
 			int selected_was = -1;
-			if (beamerview != null) {
+			if (beamerview != null && beamerview.getActualSong()!=null) {
 				selected_was = structure.findSong(beamerview.getActualSong());
 			}
 			list.removeSelectionInterval(0, list.getModel().getSize() - 1);
@@ -619,6 +633,15 @@ public class BeamerGUI extends JFrame {
 			} else {
 				list.setSelectedIndex(selected_was_list);
 			}
+			goButton.requestFocus();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public void do_showlogo() {
+		try {
+			showLogoImage();
 			goButton.requestFocus();
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -782,16 +805,55 @@ public class BeamerGUI extends JFrame {
 		}
 	}
 	
+	public ImagePanel getLogoForBack() {
+		return parent.getLogoForBack();
+	}
+	
 	// EVENT HANLDER HILFSMETHODEN:
 	public final void showActualSong() {
 		showActualSong_Foil(0);
 	}
+	private final void showLogoImage() {
+		titelfont = (Font)getOptions().get("tifo"); //$NON-NLS-1$
+		textfont = (Font)getOptions().get("tefo"); //$NON-NLS-1$
+		translatefont = (Font)getOptions().get("trfo"); //$NON-NLS-1$
+		copyrightfont = (Font)getOptions().get("cofo"); //$NON-NLS-1$
+		int units = 10;
+		logoname = (String)getOptions().get("logo"); //$NON-NLS-1$
+		
+		if (getLogoForBack()!=null && beamerview == null) {
+			try {
+				// neuen BV mit selektiertem Lied auf den letzten verf�gbaren Bildschirm legen
+				GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+				GraphicsDevice[] devices = env.getScreenDevices();
+				GraphicsDevice device = devices[devices.length - 1];
+				Dimension dim = new Dimension(device.getDisplayMode().getWidth(), device.getDisplayMode().getHeight());
+				GraphicsConfiguration gc = device.getDefaultConfiguration();
+				
+				beamerview = new BeamerView(null, titelfont, textfont, translatefont, copyrightfont, getLogoForBack(), false, getThis(), gc, BeamerView.FOIL_NUMBER_TO_SHOW_LOGO);
+				getThis().toFront();
+				getThis().requestFocus();
+			} catch (Exception ex) {
+				System.out.println("CAUGHT:"); //$NON-NLS-1$
+				ex.printStackTrace();
+			}
+		} else if (getLogoForBack()!=null && beamerview != null) {
+			// vorhandenen BV mit neuem Lied f�llen
+			beamerview.showSong(null, titelfont, textfont, translatefont, copyrightfont, false, BeamerView.FOIL_NUMBER_TO_SHOW_LOGO);
+		} else {
+			// Fehler anzeigen
+			JOptionPane.showMessageDialog(getThis(), Messages.getString("BeamerGUI.6"), Messages.getString("BeamerGUI.14"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+	}
+	
 	private final void showActualSong_Foil(int foil) {
 	    titelfont = (Font)getOptions().get("tifo"); //$NON-NLS-1$
 		textfont = (Font)getOptions().get("tefo"); //$NON-NLS-1$
 		translatefont = (Font)getOptions().get("trfo"); //$NON-NLS-1$
 		copyrightfont = (Font)getOptions().get("cofo"); //$NON-NLS-1$
 		int units = 10;
+		logoname = (String)getOptions().get("logo"); //$NON-NLS-1$
+		
 		if (beamerview == null && list.getSelectedValue() != null) {
 			try {
 				// neuen BV mit selektiertem Lied auf den letzten verf�gbaren Bildschirm legen
@@ -818,7 +880,7 @@ public class BeamerGUI extends JFrame {
 				}
 				
 				actualSongSprache.setText("(" + newsong.getSprache() + ")"); //$NON-NLS-1$ //$NON-NLS-2$
-				beamerview = new BeamerView(newsong, titelfont, textfont, translatefont, copyrightfont, false, getThis(), gc, foil);
+				beamerview = new BeamerView(newsong, titelfont, textfont, translatefont, copyrightfont, getLogoForBack(), false, getThis(), gc, foil);
 				// ScrollBar �bernehmen
 				try {
 					reur_innen.removeAll();
@@ -839,6 +901,7 @@ public class BeamerGUI extends JFrame {
 				    presentationScrollBar.addMouseWheelListener(beamerview.getScrollPane().getMouseWheelListeners()[i]);
 				}
 				getThis().toFront();
+				getThis().requestFocus();
 			} catch (Exception ex) {
 				System.out.println("CAUGHT:"); //$NON-NLS-1$
 				ex.printStackTrace();
@@ -901,7 +964,7 @@ public class BeamerGUI extends JFrame {
 				actualSongRealTitel.setText(" "); //$NON-NLS-1$
 				actualSongSprache.setText(" "); //$NON-NLS-1$
 				actualSongFolie.setText(" "); //$NON-NLS-1$
-				beamerview = new BeamerView(newsong, titelfont, textfont, translatefont, copyrightfont, false, getThis(), gc, foil);
+				beamerview = new BeamerView(newsong, titelfont, textfont, translatefont, copyrightfont, getLogoForBack(), false, getThis(), gc, foil);
 				// ScrollBar �bernehmen
 				try {
 					reur_innen.removeAll();
@@ -920,6 +983,7 @@ public class BeamerGUI extends JFrame {
 				}
 				reur_innen.validate();
 				getThis().toFront();
+				getThis().requestFocus();
 			} catch (Exception ex) {
 				System.out.println("CAUGHT:"); //$NON-NLS-1$
 				ex.printStackTrace();
@@ -985,7 +1049,7 @@ public class BeamerGUI extends JFrame {
 		// jetzt Dateiauswahl anzeigen:
 		JFileChooser pChooser = new JFileChooser();
 		pChooser.setDialogTitle(Messages.getString("BeamerGUI.95")); //$NON-NLS-1$
-		org.zephyrsoft.util.CustomFileFilter filter = new org.zephyrsoft.util.CustomFileFilter(".spr", Messages.getString("BeamerGUI.97")); //$NON-NLS-1$ //$NON-NLS-2$
+		org.zephyrsoft.util.CustomFileFilter filter = new org.zephyrsoft.util.CustomFileFilter(Messages.getString("BeamerGUI.97"), new String[] {".spr"}); //$NON-NLS-1$ //$NON-NLS-2$
 		pChooser.addChoosableFileFilter(filter);
 		int iValue = pChooser.showOpenDialog(this);
 		
@@ -1021,7 +1085,7 @@ public class BeamerGUI extends JFrame {
 		// jetzt Dateiauswahl anzeigen:
 		JFileChooser pChooser = new JFileChooser();
 		pChooser.setDialogTitle(Messages.getString("BeamerGUI.102")); //$NON-NLS-1$
-		org.zephyrsoft.util.CustomFileFilter filter = new org.zephyrsoft.util.CustomFileFilter(".spr", Messages.getString("BeamerGUI.104")); //$NON-NLS-1$ //$NON-NLS-2$
+		org.zephyrsoft.util.CustomFileFilter filter = new org.zephyrsoft.util.CustomFileFilter(Messages.getString("BeamerGUI.104"), new String[] {".spr"}); //$NON-NLS-1$ //$NON-NLS-2$
 		pChooser.addChoosableFileFilter(filter);
 		int iValue = pChooser.showSaveDialog(this);
 		

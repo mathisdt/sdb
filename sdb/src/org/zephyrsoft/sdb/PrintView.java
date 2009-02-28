@@ -280,7 +280,7 @@ public class PrintView extends JFrame {
 			// wohin soll geschrieben werden?
 			String name = ""; //$NON-NLS-1$
 			JFileChooser chooser = new JFileChooser();
-			chooser.setFileFilter(new CustomFileFilter(".pdf", Messages.getString("PrintView.17"))); //$NON-NLS-1$ //$NON-NLS-2$
+			chooser.setFileFilter(new CustomFileFilter(Messages.getString("PrintView.17"), new String[] {".pdf"})); //$NON-NLS-1$ //$NON-NLS-2$
 			int returnVal = chooser.showSaveDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				name = chooser.getSelectedFile().getAbsolutePath();
@@ -317,7 +317,7 @@ public class PrintView extends JFrame {
 			for (int i = 0; i < allsongs.size(); i++) {
 				Song asong = (Song)allsongs.elementAt(i);
 				par = new Paragraph(); //$NON-NLS-1$
-				par.add(new Chunk(asong.getTitel() + "\n", font_titel));
+				par.add(new Chunk(asong.getTitel() + "\n", font_titel)); //$NON-NLS-1$
 				document.add(par);
 				rest = asong.getTextAndAccordsInFont(mytextfont, true);
 				while (rest.length() > 0 && rest.indexOf("[") > -1) { //$NON-NLS-1$
@@ -331,7 +331,7 @@ public class PrintView extends JFrame {
 				    String thistranslate = rest.substring(st+1, en);
 				    par = new Paragraph(); //$NON-NLS-1$
 					par.add(new Chunk(thistext, font_text));
-					if (!thistranslate.equals("")) {
+					if (!thistranslate.equals("")) { //$NON-NLS-1$
 						par.add(new Chunk(thistranslate, font_translate));
 					}
 					par.setSpacingBefore(1f);
@@ -342,7 +342,7 @@ public class PrintView extends JFrame {
 				par.add(new Chunk(rest, font_text));
 				document.add(par);
 				par = new Paragraph(); //$NON-NLS-1$
-				par.add(new Chunk("\n\n" + asong.getCopyright(), font_copyright));
+				par.add(new Chunk("\n\n" + asong.getCopyright(), font_copyright)); //$NON-NLS-1$
 				document.add(par);
 				document.newPage();
 			}
@@ -372,7 +372,7 @@ public class PrintView extends JFrame {
 			// wohin soll geschrieben werden?
 			String name = ""; //$NON-NLS-1$
 			JFileChooser chooser = new JFileChooser();
-			chooser.setFileFilter(new CustomFileFilter(".pdf", Messages.getString("PrintView.17"))); //$NON-NLS-1$ //$NON-NLS-2$
+			chooser.setFileFilter(new CustomFileFilter(Messages.getString("PrintView.17"), new String[] {".pdf"})); //$NON-NLS-1$ //$NON-NLS-2$
 			int returnVal = chooser.showSaveDialog(this);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				name = chooser.getSelectedFile().getAbsolutePath();
@@ -390,7 +390,7 @@ public class PrintView extends JFrame {
 			// we open the document for writing
 			document.open();
 			Paragraph par = new Paragraph(); //$NON-NLS-1$
-			par.add(new Chunk(mysong.getTitel() + "\n", font_titel));
+			par.add(new Chunk(mysong.getTitel() + "\n", font_titel)); //$NON-NLS-1$
 			document.add(par);
 			String rest = mysong.getTextAndAccordsInFont(mytextfont, true);
 			while (rest.length() > 0 && rest.indexOf("[") > -1) { //$NON-NLS-1$
@@ -404,7 +404,7 @@ public class PrintView extends JFrame {
 			    String thistranslate = rest.substring(st+1, en);
 			    par = new Paragraph(); //$NON-NLS-1$
 				par.add(new Chunk(thistext, font_text));
-				if (!thistranslate.equals("")) {
+				if (!thistranslate.equals("")) { //$NON-NLS-1$
 					par.add(new Chunk(thistranslate, font_translate));
 				}
 				par.setSpacingBefore(1f);
@@ -415,7 +415,7 @@ public class PrintView extends JFrame {
 			par.add(new Chunk(rest, font_text));
 			document.add(par);
 			par = new Paragraph(); //$NON-NLS-1$
-			par.add(new Chunk("\n\n" + mysong.getCopyright(), font_copyright));
+			par.add(new Chunk("\n\n" + mysong.getCopyright(), font_copyright)); //$NON-NLS-1$
 			document.add(par);
 			document.close();
 		} catch (Exception ex) {

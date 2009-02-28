@@ -2,7 +2,9 @@ package org.zephyrsoft.sdb;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 
+import javax.imageio.*;
 import javax.swing.*;
 
 import org.zephyrsoft.sdb.structure.*;
@@ -45,6 +47,7 @@ public class OptionsGUI extends JFrame {
 	JCheckBox zeige_titel;
 	JCheckBox mehrere_folien;
 	JTextField scroll_amount;
+	JButton logoSelect;
 	
 	public OptionsGUI(GUI parent) {
 		super(Messages.getString("OptionsGUI.0")); //$NON-NLS-1$
@@ -86,9 +89,10 @@ public class OptionsGUI extends JFrame {
 		mehrere_folien = new JCheckBox("", (runtime.get("mf")==null ? false : ((Boolean)runtime.get("mf")).booleanValue())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		scroll_amount = new JTextField((runtime.get("scroll")==null ? "5" : runtime.get("scroll").toString())); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
+		logoSelect = new JButton(Messages.getString("OptionsGUI.1")); //$NON-NLS-1$
 		
 		// GUI aufbauen:
-		contentPane.setLayout(new GridLayout(17, 2));
+		contentPane.setLayout(new GridLayout(18, 2));
 		// vorne
 		contentPane.add(titelfont);
 		contentPane.add(altertitelfont);
@@ -120,6 +124,13 @@ public class OptionsGUI extends JFrame {
 		contentPane.add(mehrere_folien);
 		contentPane.add(new JLabel(Messages.getString("OptionsGUI.62"))); //$NON-NLS-1$
 		contentPane.add(scroll_amount);
+		contentPane.add(new JLabel(Messages.getString("OptionsGUI.2"))); //$NON-NLS-1$
+		JPanel logoPanel = new JPanel();
+		logoPanel.setLayout(new GridLayout(1, 2));
+		logoPanel.add(parent.getLogoForOptions());
+		logoPanel.add(logoSelect);
+		contentPane.add(logoPanel);
+		
 		contentPane.add(new JLabel(" ")); //$NON-NLS-1$
 		contentPane.add(new JLabel(" ")); //$NON-NLS-1$
 		contentPane.add(cancelButton);
@@ -127,6 +138,8 @@ public class OptionsGUI extends JFrame {
 		
 		this.setContentPane(contentPane);
 		actualizeFonts();
+		parent.getLogoForOptions().scaleImage();
+		
 		pack();
 		setSize(new Dimension(650, 450));
 		setLocation(new Point(300, 125));
@@ -216,6 +229,30 @@ public class OptionsGUI extends JFrame {
 				}
 			}
 		);
+		logoSelect.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						// Datei aussuchen lassen
+						String logoname = null;
+						JFileChooser chooser = new JFileChooser();
+						chooser.setMultiSelectionEnabled(false);
+						chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+						chooser.setFileFilter(new CustomFileFilter(Messages.getString("OptionsGUI.6"), new String[] {".jpg", ".jpeg", ".png", ".gif"})); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+						chooser.showOpenDialog(OptionsGUI.this);
+						logoname = (chooser.getSelectedFile()==null ? "" : chooser.getSelectedFile().getPath()); //$NON-NLS-1$
+						
+						// prüfen
+						try {
+							getGUI().loadLogo(logoname);
+							getGUI().getLogoForOptions().repaint();
+						} catch(Exception ex) {
+							logoname = ""; //$NON-NLS-1$
+						}
+						// Einstellung speichern
+						getRuntime().put("logo", logoname); //$NON-NLS-1$
+					}
+				}
+			);
 		okButton.addActionListener(
 			new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
