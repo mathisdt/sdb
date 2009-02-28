@@ -138,7 +138,9 @@ public class OptionsGUI extends JFrame {
 		
 		this.setContentPane(contentPane);
 		actualizeFonts();
-		parent.getLogoForOptions().scaleImage();
+		if (parent.getLogoForOptions()!=null) {
+			parent.getLogoForOptions().scaleImage();
+		}
 		
 		pack();
 		setSize(new Dimension(650, 450));
@@ -244,7 +246,9 @@ public class OptionsGUI extends JFrame {
 						// prüfen
 						try {
 							getGUI().loadLogo(logoname);
-							getGUI().getLogoForOptions().repaint();
+							if (getGUI().getLogoForOptions()!=null) {
+								getGUI().getLogoForOptions().repaint();
+							}
 						} catch(Exception ex) {
 							logoname = ""; //$NON-NLS-1$
 						}
