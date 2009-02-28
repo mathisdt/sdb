@@ -127,7 +127,7 @@ public class OptionsGUI extends JFrame {
 		contentPane.add(new JLabel(Messages.getString("OptionsGUI.2"))); //$NON-NLS-1$
 		JPanel logoPanel = new JPanel();
 		logoPanel.setLayout(new GridLayout(1, 2));
-		logoPanel.add(parent.getLogoForOptions());
+		logoPanel.add((parent.getLogoForOptions()!=null ? parent.getLogoForOptions() : (JComponent)new JLabel()));
 		logoPanel.add(logoSelect);
 		contentPane.add(logoPanel);
 		
