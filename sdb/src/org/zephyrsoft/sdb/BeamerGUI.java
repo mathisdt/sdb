@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 
+import org.pushingpixels.trident.*;
 import org.zephyrsoft.sdb.dnd.*;
 import org.zephyrsoft.sdb.structure.*;
 import org.zephyrsoft.util.*;
@@ -84,6 +85,7 @@ public class BeamerGUI extends JFrame {
 	JButton hidePresentationButton = null;
 	JScrollBar presentationScrollBar = null;
 	JPanel reur_innen = null;
+	JPanel reur_aussen = null;
 	GridBagConstraints reur_innen_constraints = null;
 	GridBagLayout reur_innen_gridbag = null;
 	
@@ -254,7 +256,10 @@ public class BeamerGUI extends JFrame {
 		reur_innen_constraints = new GridBagConstraints();
 		reur_innen_constraints.fill = GridBagConstraints.VERTICAL;
 		reur_innen_constraints.weighty = 1.0;
-		reur.add(reur_innen);
+		reur.add(reur_innen, BorderLayout.CENTER);
+		reur_aussen = new JPanel();
+		reur_aussen.setLayout(new BoxLayout(reur_aussen, BoxLayout.Y_AXIS));
+		reur.add(reur_aussen, BorderLayout.EAST);
 		reu.add(reul);
 		reu.add(reur);
 		re.add(reu);
@@ -592,6 +597,33 @@ public class BeamerGUI extends JFrame {
 		parent.registerGKL(getContentPane());
 		
 		setVisible(true);
+	}
+	
+	public void updateJumpButtons() {
+		reur_aussen.removeAll();
+		if (list.getSelectedValue() != null) {
+			java.util.List[] lists = beamerview.getTextWithPositions();
+			for (int i = 0; i < lists[0].size(); i++) {
+				String txt = (String)lists[0].get(i);
+				final Integer pos = (Integer)lists[1].get(i);
+				// create new button in reur_aussen
+				JButton butt = new JButton();
+				butt.setText(txt.substring(0, 10) + "...");
+				butt.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						// TODO http://kenai.com/projects/trident/pages/ParallelSwingTimelines
+						
+						Timeline timeline = new Timeline(beamerview.scrollPane.getViewport());
+						timeline.addPropertyToInterpolateTo("viewPosition", new Point(0, pos.intValue()));
+						timeline.setDuration(2000);
+						timeline.play();
+					}
+				});
+				reur_aussen.add(butt);
+			}
+			
+		}
 	}
 	
 	public void sortlist(boolean byTitle) {
@@ -1018,6 +1050,7 @@ public class BeamerGUI extends JFrame {
 			}
 			reur_innen.validate();
 		}
+		updateJumpButtons();
 	}
 	
 	private final void exit() {

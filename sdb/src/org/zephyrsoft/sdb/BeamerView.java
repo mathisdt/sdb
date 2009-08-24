@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.util.*;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -29,6 +30,8 @@ public class BeamerView extends JFrame {
 	
 	private JLabel titel;
 	private JTextPane text;
+	private List textPositions;
+	private List textParts;
 	
 	private Song actualSong = null;
 	
@@ -126,6 +129,7 @@ public class BeamerView extends JFrame {
 			System.out.println("ERROR WHILE SETTING WINDOW TO FULLSCREEN: " + ex.getMessage()); //$NON-NLS-1$
 		}
 		
+		calculateTextPositions();
 	}
 	
 	public void scroll_down() {
@@ -340,9 +344,39 @@ public class BeamerView extends JFrame {
 			scrollPane.setCursor(transparentCursor);
 			titel.setCursor(transparentCursor);
 			text.setCursor(transparentCursor);
-	
+			
 			//blackScreen(false);
 		}
+	}
+	
+	private void calculateTextPositions() {
+		// TODO Positionen der Absätze speichern
+		textParts = new ArrayList();
+		textPositions = new ArrayList();
+		textPositions.add(Integer.valueOf(0));
+		String[] parts = text.getText().split("\n\n");
+		int cursorPos = 0;
+		for (int i = 0; i < parts.length; i++) {
+			textParts.add(parts[i]);
+			// +2 because the delimiter has to be counted too:
+			cursorPos += parts[i].length() + 2;
+			if (cursorPos <= text.getText().length()) {
+				Rectangle r = null;
+				try {
+					text.setCaretPosition(cursorPos);
+					r = text.modelToView(text.getCaretPosition());
+				} catch (BadLocationException e) {
+					e.printStackTrace();
+				}
+				if (r != null) {
+					textPositions.add(Integer.valueOf(Double.valueOf(r.getY()).intValue()));
+				}
+			}
+		}
+	}
+	
+	public List[] getTextWithPositions() {
+		return new List[] {textParts, textPositions};
 	}
 	
 	public int nextFoil() {
