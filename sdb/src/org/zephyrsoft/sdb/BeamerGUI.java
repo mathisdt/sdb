@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
 import java.io.*;
+import java.lang.reflect.*;
 
 import javax.imageio.*;
 import javax.swing.*;
@@ -11,6 +12,7 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 
 import org.pushingpixels.trident.*;
+import org.pushingpixels.trident.Timeline.*;
 import org.zephyrsoft.sdb.dnd.*;
 import org.zephyrsoft.sdb.structure.*;
 import org.zephyrsoft.util.*;
@@ -28,6 +30,8 @@ public class BeamerGUI extends JFrame {
 	public GUI parent = null;
 	
 	protected BeamerView beamerview = null;
+	
+	protected Timeline scrollTimeline = null;
 	
 	public boolean closing = false;
 	
@@ -531,6 +535,7 @@ public class BeamerGUI extends JFrame {
 		logoButton.addActionListener(
 			new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					do_empty();
 					do_showlogo();
 				}
 			}
@@ -611,18 +616,17 @@ public class BeamerGUI extends JFrame {
 				butt.setText(txt.substring(0, 10) + "...");
 				butt.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						
-						// TODO http://kenai.com/projects/trident/pages/ParallelSwingTimelines
-						
-						Timeline timeline = new Timeline(beamerview.scrollPane.getViewport());
-						timeline.addPropertyToInterpolateTo("viewPosition", new Point(0, pos.intValue()));
-						timeline.setDuration(2000);
-						timeline.play();
+						if (scrollTimeline!=null && scrollTimeline.getState()==TimelineState.PLAYING_FORWARD) {
+							scrollTimeline.cancel();
+						}
+						scrollTimeline = new Timeline(beamerview.scrollPane.getViewport());
+						scrollTimeline.addPropertyToInterpolateTo("viewPosition", new Point(0, pos.intValue()));
+						scrollTimeline.setDuration(1200);
+						scrollTimeline.play();
 					}
 				});
 				reur_aussen.add(butt);
 			}
-			
 		}
 	}
 	
@@ -878,7 +882,7 @@ public class BeamerGUI extends JFrame {
 		}
 	}
 	
-	private final void showActualSong_Foil(int foil) {
+	private final void showActualSong_Foil(final int foil) {
 	    titelfont = (Font)getOptions().get("tifo"); //$NON-NLS-1$
 		textfont = (Font)getOptions().get("tefo"); //$NON-NLS-1$
 		translatefont = (Font)getOptions().get("trfo"); //$NON-NLS-1$
@@ -1050,7 +1054,6 @@ public class BeamerGUI extends JFrame {
 			}
 			reur_innen.validate();
 		}
-		updateJumpButtons();
 	}
 	
 	private final void exit() {

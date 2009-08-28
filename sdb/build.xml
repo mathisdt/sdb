@@ -22,9 +22,11 @@
 			</fileset>
 		</copy>
 		-->
-		<echo file="${release.dir}/run-sdb.bat" append="false">java -jar sdb.jar</echo>
+		<echo file="${release.dir}/run-sdb.bat" append="false">java -jar sdb.jar %1 %2 %3 %4 %5 %6 %7 %8 %9
+</echo>
 		<echo file="${release.dir}/run-sdb.sh" append="false">#!/bin/sh
-java -jar sdb.jar</echo>
+java -jar sdb.jar $$*
+</echo>
 	</target>
 
 	<target name="prepare">
@@ -39,7 +41,11 @@ java -jar sdb.jar</echo>
 		<!-- Klassen und Ressourcen kopieren -->
 		<copy todir="${target.dir}">
 			<fileset dir="${bin.dir}">
-				<include name="org/zephyrsoft/**.class" />
+				<include name="org/zephyrsoft/**" />
+				<include name="*.properties" />
+				<include name="res/**" />
+				<exclude name="CVS/**" />
+				<exclude name="**/*.java" />
 			</fileset>
 		</copy>
 

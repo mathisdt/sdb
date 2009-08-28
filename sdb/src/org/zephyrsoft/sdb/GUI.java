@@ -870,9 +870,21 @@ public class GUI extends JFrame {
 	
 	public void do_showbeamercontrol() {
 		if (beamergui == null) {
-			beamergui = new BeamerGUI(getThis());
-		} else {
+			beamergui = new BeamerGUI(this);
+		}
+		// so aufwendig implementiert, um eine Eingenheit des Gnome-Window-Managers "Metacity" zu umgehen
+		// (Metacity hebt Fenster nicht via "toFront()" an, sondern lässt nur ihren Taskbar-Eintrag fett werden und blinken)
+		if (!beamergui.isActive()) {
+			final Point location = beamergui.getLocation();
+			beamergui.setVisible(false);
 			beamergui.toFront();
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					beamergui.setLocation(location);
+					beamergui.setVisible(true);
+					beamergui.requestFocus();
+				}
+			});
 		}
 	}
 	
@@ -1098,11 +1110,7 @@ public class GUI extends JFrame {
 	}
 	private final void showActualSongPresentation() {
 		// BeamerGUI �ffnen/benutzen, Song dort anf�gen und BeamerGUI i.d.Vordergrund
-		if (beamergui == null) {
-			beamergui = new BeamerGUI(getThis());
-		} else {
-			beamergui.toFront();
-		}
+		do_showbeamercontrol();
 		try {
 		    beamergui.addSong(structure.getSongByID(Integer.parseInt((String)table.getModel().getValueAt(table.getSelectedRow(), 3))));
 		} catch(ArrayIndexOutOfBoundsException ex) {}
@@ -1571,17 +1579,6 @@ public class GUI extends JFrame {
 	
 	public void setBeamerGuiToNull() {
 		this.beamergui = null;
-	}
-	
-	public void beamerGuiToFront() {
-		if (beamergui != null) {
-			beamergui.toFront();
-			beamergui.requestFocus();
-		} else {
-			beamergui = new BeamerGUI(this);
-			beamergui.toFront();
-			beamergui.requestFocus();
-		}
 	}
 	
 	public void showPresentation(String file_name) {

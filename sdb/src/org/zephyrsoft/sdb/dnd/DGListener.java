@@ -48,7 +48,7 @@ public class DGListener implements DragGestureListener {
 			// initial cursor, transferrable, dsource listener
 			if (parent instanceof GUI) {
 				e.startDrag(DragSource.DefaultCopyNoDrop, transferable, ((GUI)parent).getDSListener());
-				((GUI)parent).beamerGuiToFront();
+				((GUI)parent).do_showbeamercontrol();
 			} else if (parent instanceof BeamerGUI) {
 				e.startDrag(DragSource.DefaultCopyNoDrop, transferable, ((BeamerGUI)parent).getDSListener());
 			}

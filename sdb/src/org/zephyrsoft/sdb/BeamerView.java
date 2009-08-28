@@ -128,8 +128,6 @@ public class BeamerView extends JFrame {
 			//device.setFullScreenWindow(null);
 			System.out.println("ERROR WHILE SETTING WINDOW TO FULLSCREEN: " + ex.getMessage()); //$NON-NLS-1$
 		}
-		
-		calculateTextPositions();
 	}
 	
 	public void scroll_down() {
@@ -319,7 +317,6 @@ public class BeamerView extends JFrame {
 			*/
 			text.setBorder(BorderFactory.createEmptyBorder(((Integer)parent.getOptions().get(((parent.getOptions().get("zt")==null ? true : (((Boolean)parent.getOptions().get("zt")).booleanValue())) ? "spup" : "sptt"))).intValue(), ((Integer)parent.getOptions().get("sple")).intValue(),0,15)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 			text.setEditable(false);
-	//		back.setIgnoreRepaint(true);
 			back.add(text, BorderLayout.CENTER);
 			back.setBorder(BorderFactory.createEmptyBorder(0, 0, ((Integer)parent.getOptions().get("spdo")).intValue(), 0)); //$NON-NLS-1$
 			if (parent.getOptions().get("zt")==null ? true : (((Boolean)parent.getOptions().get("zt")).booleanValue())) { //$NON-NLS-1$ //$NON-NLS-2$
@@ -330,7 +327,6 @@ public class BeamerView extends JFrame {
 			SwingUtilities.invokeLater(new Runnable() {
 			    public void run() {
 			        scroll(back, TOP);
-	//		        back.setIgnoreRepaint(false);
 			    }
 			});
 			int[] pixels = new int[16 * 16];
@@ -345,12 +341,20 @@ public class BeamerView extends JFrame {
 			titel.setCursor(transparentCursor);
 			text.setCursor(transparentCursor);
 			
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					calculateTextPositions();
+					parent.updateJumpButtons();
+					parent.validate();
+				}
+			});
+			
 			//blackScreen(false);
 		}
 	}
 	
-	private void calculateTextPositions() {
-		// TODO Positionen der Absätze speichern
+	public void calculateTextPositions() {
+		// Positionen der Absätze speichern
 		textParts = new ArrayList();
 		textPositions = new ArrayList();
 		textPositions.add(Integer.valueOf(0));
@@ -373,6 +377,12 @@ public class BeamerView extends JFrame {
 				}
 			}
 		}
+		
+		SwingUtilities.invokeLater(new Runnable() {
+		    public void run() {
+		        scroll(back, TOP);
+		    }
+		});
 	}
 	
 	public List[] getTextWithPositions() {
