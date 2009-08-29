@@ -41,6 +41,10 @@ java -jar sdb.jar $$*
 	</target>
 
 	<target name="createJar">
+		<!-- Informationen zur Version einlesen -->
+		<property file="src/version.properties" />
+		<echo message="read properties file: version=${programVersion}, date=${programDate}" />
+		
 		<!-- Klassen und Ressourcen kopieren -->
 		<copy todir="${target.dir}">
 			<fileset dir="${bin.dir}">
@@ -55,7 +59,8 @@ java -jar sdb.jar $$*
 		<!-- Bibliotheken hinzufügen -->
 		<unzip dest="${target.dir}">
 			<patternset>
-				<exclude name="META-INF/**"/>
+				<exclude name="META-INF/services/**"/>
+				<exclude name="META-INF/MANIFEST.MF"/>
 			</patternset>
 			<fileset dir="${lib.dir}">
 				<include name="**/*.jar"/>
@@ -67,6 +72,9 @@ java -jar sdb.jar $$*
 		<jar basedir="${target.dir}" destfile="${release.dir}/sdb.jar">
 			<manifest>
 				<attribute name="Main-Class" value="org.zephyrsoft.sdb.Start" />
+				<attribute name="Implementation-Vendor" value="zephyrsoft.net"/>
+				<attribute name="Implementation-Title" value="Song Database (SDB)"/>
+				<attribute name="Implementation-Version" value="${programVersion} (published in ${programDate})"/>
 			</manifest>
 		</jar>
 	</target>
