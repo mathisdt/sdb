@@ -10,6 +10,7 @@ public class Messages {
 	private String BUNDLE_NAME = null;
 	private static final String FALLBACK_BUNDLE_NAME = "lang_de";//$NON-NLS-1$
 	private ResourceBundle RESOURCE_BUNDLE = null;
+	private ResourceBundle VERSION_RESOURCE_BUNDLE = null;
 
 	private Messages() {
 		// BUNDLE_NAME einlesen aus Datei language
@@ -29,6 +30,8 @@ public class Messages {
 				System.err.println("couldn't write new language setting to file \"language\"");//$NON-NLS-1$
 			}
 		}
+		// VERSION_RESOURCE_BUNDLE einlesen
+		VERSION_RESOURCE_BUNDLE = ResourceBundle.getBundle("version");
 	}
 	
 	private static Messages getInstance() {
@@ -38,6 +41,14 @@ public class Messages {
 	public static String getString(String key) {
 		try {
 			return getInstance().RESOURCE_BUNDLE.getString(key);
+		} catch (MissingResourceException e) {
+			return '!' + key + '!';
+		}
+	}
+	
+	public static String getVersionString(String key) {
+		try {
+			return getInstance().VERSION_RESOURCE_BUNDLE.getString(key);
 		} catch (MissingResourceException e) {
 			return '!' + key + '!';
 		}
