@@ -31,7 +31,7 @@ public class Messages {
 			}
 		}
 		// VERSION_RESOURCE_BUNDLE einlesen
-		VERSION_RESOURCE_BUNDLE = ResourceBundle.getBundle("version");
+		VERSION_RESOURCE_BUNDLE = ResourceBundle.getBundle("version"); //$NON-NLS-1$
 	}
 	
 	private static Messages getInstance() {

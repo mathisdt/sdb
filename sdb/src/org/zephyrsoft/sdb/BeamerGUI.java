@@ -613,14 +613,14 @@ public class BeamerGUI extends JFrame {
 				final Integer pos = (Integer)lists[1].get(i);
 				// create new button in reur_aussen
 				JButton butt = new JButton();
-				butt.setText(txt.substring(0, 10) + "...");
+				butt.setText(txt.substring(0, 10) + "..."); //$NON-NLS-1$
 				butt.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						if (scrollTimeline!=null && scrollTimeline.getState()==TimelineState.PLAYING_FORWARD) {
 							scrollTimeline.cancel();
 						}
 						scrollTimeline = new Timeline(beamerview.scrollPane.getViewport());
-						scrollTimeline.addPropertyToInterpolateTo("viewPosition", new Point(0, pos.intValue()));
+						scrollTimeline.addPropertyToInterpolateTo("viewPosition", new Point(0, pos.intValue())); //$NON-NLS-1$
 						scrollTimeline.setDuration(1200);
 						scrollTimeline.play();
 					}

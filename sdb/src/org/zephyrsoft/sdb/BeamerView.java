@@ -366,7 +366,7 @@ public class BeamerView extends JFrame {
 		textParts = new ArrayList();
 		textPositions = new ArrayList();
 		textPositions.add(Integer.valueOf(0));
-		String[] parts = text.getText().split("\n\n");
+		String[] parts = text.getText().split("\n\n"); //$NON-NLS-1$
 		int cursorPos = 0;
 		for (int i = 0; i < parts.length; i++) {
 			textParts.add(parts[i]);

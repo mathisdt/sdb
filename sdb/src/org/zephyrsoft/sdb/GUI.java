@@ -140,7 +140,7 @@ public class GUI extends JFrame {
 		menuitem_file_save = new JMenuItem(Messages.getString("GUI.20")); //$NON-NLS-1$
 		menuitem_file_saveas = new JMenuItem(Messages.getString("GUI.21")); //$NON-NLS-1$
 		menuitem_file_options = new JMenuItem(Messages.getString("GUI.22")); //$NON-NLS-1$
-		menuitem_file_version = new JMenuItem(Messages.getString("GUI.23") + Messages.getVersionString("programVersion")); //$NON-NLS-1$
+		menuitem_file_version = new JMenuItem(Messages.getString("GUI.23") + Messages.getVersionString("programVersion")); //$NON-NLS-1$ //$NON-NLS-2$
 		menuitem_file_exit = new JMenuItem(Messages.getString("GUI.24")); //$NON-NLS-1$
 		menu_song = new JMenu(Messages.getString("GUI.25")); //$NON-NLS-1$
 		menuitem_song_new = new JMenuItem(Messages.getString("GUI.26")); //$NON-NLS-1$
@@ -640,7 +640,7 @@ public class GUI extends JFrame {
 		menuitem_file_version.addActionListener(
 			new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(GUI.this, "<html><b><u>Song Database " + Messages.getVersionString("programVersion") + "</u></b><br><br>" + Messages.getString("GUI.1") + "<font size=\"+1\"><b>" + Messages.getString("GUI.0") + "</b></font></html>", Messages.getString("GUI.90") + Messages.getVersionString("programVersion") + Messages.getString("GUI.2") + Messages.getVersionString("programDate"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$
+					JOptionPane.showMessageDialog(GUI.this, "<html><b><u>Song Database " + Messages.getVersionString("programVersion") + "</u></b><br><br>" + Messages.getString("GUI.1") + "<font size=\"+1\"><b>" + Messages.getString("GUI.0") + "</b></font></html>", Messages.getString("GUI.90") + Messages.getVersionString("programVersion") + Messages.getString("GUI.2") + Messages.getVersionString("programDate"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-9$ //$NON-NLS-10$ //$NON-NLS-11$
 				}
 			}
 		);
