@@ -351,6 +351,12 @@ public class BeamerView extends JFrame {
 			
 			//blackScreen(false);
 		}
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				BeamerView.this.validate();
+			}
+		});
 	}
 	
 	public void calculateTextPositions() {
