@@ -974,7 +974,9 @@ public class BeamerGUI extends JFrame {
 				for (int i = 0; i < presentationScrollBar.getMouseWheelListeners().length; i++) {
 				    presentationScrollBar.removeMouseWheelListener(presentationScrollBar.getMouseWheelListeners()[i]);
 				}
-			} catch (Exception ex) {}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 			presentationScrollBar = beamerview.getScrollPane().getVerticalScrollBar();
 			presentationScrollBar.setUnitIncrement(units);
 			reur_innen_gridbag.setConstraints(presentationScrollBar, reur_innen_constraints);
@@ -1024,8 +1026,7 @@ public class BeamerGUI extends JFrame {
 				System.out.println("CAUGHT:"); //$NON-NLS-1$
 				ex.printStackTrace();
 			}
-		}
-		else if (beamerview != null && list.getSelectedValue() == null) {
+		} else if (beamerview != null && list.getSelectedValue() == null) {
 			// BV l�schen
 			Song newsong = new Song( -2);
 			aktuelleFolie = foil;

@@ -165,7 +165,7 @@ public class BeamerView extends JFrame {
 		//blackScreen(true);
 		
 		if (back!=null) {
-			back.remove(logo);
+			back.removeAll();
 		}
 		
 		back = new JPanel();
@@ -197,7 +197,9 @@ public class BeamerView extends JFrame {
 				this.setBackground((Color)parent.getOptions().get("bgco")); //$NON-NLS-1$
 				this.getRootPane().setBackground((Color)parent.getOptions().get("bgco")); //$NON-NLS-1$
 				this.getContentPane().setBackground((Color)parent.getOptions().get("bgco")); //$NON-NLS-1$
-			} catch (Exception ex) {}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 			back.setBackground((Color)parent.getOptions().get("bgco")); //$NON-NLS-1$
 			back.repaint();
 			
