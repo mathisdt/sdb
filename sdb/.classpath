@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/hoardersoft-2.2.jar" sourcepath="lib/hoardersoft-2.2-src.zip"/>
+	<classpathentry kind="lib" path="lib/itext-2.1.4.jar" sourcepath="lib/itext-2.1.4-src.zip"/>
+	<classpathentry kind="lib" path="lib/looks-2.2.1.jar" sourcepath="lib/looks-2.2.1-src.zip"/>
+	<classpathentry kind="lib" path="lib/tablelayout-2007-04-21.jar" sourcepath="lib/tablelayout-2007-04-21-src.zip"/>
+	<classpathentry kind="lib" path="lib/trident-1.0.jar" sourcepath="lib/trident-1.0-src.zip"/>
+	<classpathentry kind="output" path="src"/>
+</classpath>
