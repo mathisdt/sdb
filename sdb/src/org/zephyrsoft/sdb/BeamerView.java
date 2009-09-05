@@ -350,13 +350,6 @@ public class BeamerView extends JFrame {
 					calculateTextPositions();
 					parent.updateJumpButtons();
 					parent.validate();
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					// für schnelles Scrollen ohne Ruckeln:
-					scrollPane.getViewport().setScrollMode(JViewport.BLIT_SCROLL_MODE);
 				}
 			});
 		}
@@ -364,6 +357,8 @@ public class BeamerView extends JFrame {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				BeamerView.this.validate();
+				// für schnelles Scrollen ohne Ruckeln:
+				scrollPane.getViewport().setScrollMode(JViewport.BLIT_SCROLL_MODE);
 			}
 		});
 	}
