@@ -109,8 +109,10 @@ public class BeamerView extends JFrame {
 		pack();
 		show();
 		
-		// global DoubleBuffering einschalten:
+		// Performance-Tuning:
 		RepaintManager.currentManager(back).setDoubleBufferingEnabled(true);
+		scrollPane.getViewport().putClientProperty("EnableWindowBlit", Boolean.TRUE);
+		scrollPane.getViewport().setScrollMode(JViewport.BACKINGSTORE_SCROLL_MODE);
 		
 		// gro� auf letztem verf�gbaren Bildschirm machen (wird wohl der Beamer sein):
 		try {
