@@ -111,7 +111,6 @@ public class BeamerView extends JFrame {
 		
 		// Performance-Tuning:
 		RepaintManager.currentManager(back).setDoubleBufferingEnabled(true);
-		scrollPane.getViewport().putClientProperty("EnableWindowBlit", Boolean.TRUE);
 		scrollPane.getViewport().setScrollMode(JViewport.BACKINGSTORE_SCROLL_MODE);
 		
 		// gro� auf letztem verf�gbaren Bildschirm machen (wird wohl der Beamer sein):
@@ -164,8 +163,6 @@ public class BeamerView extends JFrame {
 		actualSong = newsong;
 		actualFoil = foil;
 		
-		//blackScreen(true);
-		
 		if (back!=null) {
 			back.removeAll();
 		}
@@ -194,6 +191,9 @@ public class BeamerView extends JFrame {
 			scrollPane.setDoubleBuffered(true);
 			
 			this.setContentPane(scrollPane.getViewport());
+			
+			// nur so ohne Flackern am Anfang:
+			scrollPane.getViewport().setScrollMode(JViewport.BACKINGSTORE_SCROLL_MODE);
 			
 			try {
 				this.setBackground((Color)parent.getOptions().get("bgco")); //$NON-NLS-1$
@@ -350,10 +350,15 @@ public class BeamerView extends JFrame {
 					calculateTextPositions();
 					parent.updateJumpButtons();
 					parent.validate();
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					// für schnelles Scrollen ohne Ruckeln:
+					scrollPane.getViewport().setScrollMode(JViewport.BLIT_SCROLL_MODE);
 				}
 			});
-			
-			//blackScreen(false);
 		}
 		
 		SwingUtilities.invokeLater(new Runnable() {
