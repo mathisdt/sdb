@@ -19,7 +19,7 @@ public class Start {
 		LookAndFeelUtil.setMyLookAndFeel();
 		
 		// Frage
-		/*		Object[] options = { "Beamer-Pr�sentation", "Datenbank" };
+		/*		Object[] options = { "Beamer-Präsentation", "Datenbank" };
 				int answer = JOptionPane.showOptionDialog(null, "Welche Ansicht soll gezeigt werden?", "Auswahl der Ansicht",
 					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 		*/

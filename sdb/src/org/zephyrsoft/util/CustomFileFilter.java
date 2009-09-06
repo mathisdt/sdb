@@ -4,7 +4,7 @@ import java.io.*;
 
 import javax.swing.filechooser.FileFilter;
 
-/** FileFilter f�r Dateien mit beliebigen Endungen. */
+/** FileFilter für Dateien mit beliebigen Endungen. */
 public class CustomFileFilter extends javax.swing.filechooser.FileFilter implements java.io.FileFilter {
 	
 	private String[] extension = new String[] {};

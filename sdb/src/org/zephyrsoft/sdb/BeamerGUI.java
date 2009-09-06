@@ -18,7 +18,7 @@ import org.zephyrsoft.sdb.structure.*;
 import org.zephyrsoft.util.*;
 
 /**
- * GUI f�r die Lieder-Pr�sentation auf dem Beamer
+ * GUI für die Lieder-Präsentation auf dem Beamer
  *
  * @author   Mathis Dirksen-Thedens
  */
@@ -108,7 +108,7 @@ public class BeamerGUI extends JFrame {
 		LookAndFeelUtil.setMyLookAndFeel();
 		setIconImage(LookAndFeelUtil.getIcon());
 		
-		// Men� definieren
+		// Menü definieren
 		menubar = new JMenuBar();
 		menu_file = new JMenu(Messages.getString("BeamerGUI.7")); //$NON-NLS-1$
 		menu_window = new JMenu(Messages.getString("BeamerGUI.8")); //$NON-NLS-1$
@@ -120,7 +120,7 @@ public class BeamerGUI extends JFrame {
 		menuitem_file_sortbegin = new JMenuItem(Messages.getString("BeamerGUI.2")); //$NON-NLS-1$
 		menuitem_window_exit = new JMenuItem(Messages.getString("BeamerGUI.13")); //$NON-NLS-1$
 		
-		// Men� zusammenbauen
+		// Menü zusammenbauen
 		menubar.add(menu_file);
 		menubar.add(menu_window);
 		menu_file.add(menuitem_file_sorttitle);
@@ -138,7 +138,7 @@ public class BeamerGUI extends JFrame {
 		list = new JList();
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
-		// DND zur Liste hinzuf�gen
+		// DND zur Liste hinzufügen
 		this.dtlistener = new DTListener(this);
 		
 		// component, ops, listener, accepting
@@ -273,7 +273,7 @@ public class BeamerGUI extends JFrame {
 		setSize(new Dimension(600, 590));
 		setLocation(new Point(350, 100));
 		
-		// nichts standardm��ig tun, nur exit() darf das Fenster schlie�en!
+		// nichts standardmäßig tun, nur exit() darf das Fenster schließen!
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		
 		// EVENT HANDLER START =======================================
@@ -598,7 +598,7 @@ public class BeamerGUI extends JFrame {
 		);
 		// EVENT HANDLER ENDE ========================================
 		
-		// alles f�r globalKeyListener registrieren:
+		// alles für globalKeyListener registrieren:
 		parent.registerGKL(getContentPane());
 		
 		setVisible(true);
@@ -859,7 +859,7 @@ public class BeamerGUI extends JFrame {
 		
 		if (getLogoForBack()!=null && beamerview == null) {
 			try {
-				// neuen BV mit selektiertem Lied auf den letzten verf�gbaren Bildschirm legen
+				// neuen BV mit selektiertem Lied auf den letzten verfügbaren Bildschirm legen
 				GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
 				GraphicsDevice[] devices = env.getScreenDevices();
 				GraphicsDevice device = devices[devices.length - 1];
@@ -874,7 +874,7 @@ public class BeamerGUI extends JFrame {
 				ex.printStackTrace();
 			}
 		} else if (getLogoForBack()!=null && beamerview != null) {
-			// vorhandenen BV mit neuem Lied f�llen
+			// vorhandenen BV mit neuem Lied füllen
 			beamerview.showSong(null, titelfont, textfont, translatefont, copyrightfont, false, BeamerView.FOIL_NUMBER_TO_SHOW_LOGO);
 		} else {
 			// Fehler anzeigen
@@ -892,7 +892,7 @@ public class BeamerGUI extends JFrame {
 		
 		if (beamerview == null && list.getSelectedValue() != null) {
 			try {
-				// neuen BV mit selektiertem Lied auf den letzten verf�gbaren Bildschirm legen
+				// neuen BV mit selektiertem Lied auf den letzten verfügbaren Bildschirm legen
 				GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
 				GraphicsDevice[] devices = env.getScreenDevices();
 				GraphicsDevice device = devices[devices.length - 1];
@@ -917,7 +917,7 @@ public class BeamerGUI extends JFrame {
 				
 				actualSongSprache.setText("(" + newsong.getSprache() + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 				beamerview = new BeamerView(newsong, titelfont, textfont, translatefont, copyrightfont, getLogoForBack(), false, getThis(), gc, foil);
-				// ScrollBar �bernehmen
+				// ScrollBar übernehmen
 				try {
 					reur_innen.removeAll();
 					for (int i = 0; i < reur_innen.getMouseWheelListeners().length; i++) {
@@ -943,7 +943,7 @@ public class BeamerGUI extends JFrame {
 				ex.printStackTrace();
 			}
 		} else if (beamerview != null && list.getSelectedValue() != null) {
-			// vorhandenen BV mit neuem Lied f�llen
+			// vorhandenen BV mit neuem Lied füllen
 		    Song newsong = (Song)list.getSelectedValue();
 			fillFoilList(newsong);
 			aktuelleFolie = foil;
@@ -965,7 +965,7 @@ public class BeamerGUI extends JFrame {
 			    actualSongFolie.setText(" "); //$NON-NLS-1$
 			}
 			beamerview.showSong(newsong, titelfont, textfont, translatefont, copyrightfont, false, foil);
-			// ScrollBar �bernehmen
+			// ScrollBar übernehmen
 			try {
 				reur_innen.removeAll();
 				for (int i = 0; i < reur_innen.getMouseWheelListeners().length; i++) {
@@ -988,7 +988,7 @@ public class BeamerGUI extends JFrame {
 			reur_innen.validate();
 		} else if (beamerview == null && list.getSelectedValue() == null) {
 			try {
-				// neuen BV auf den letzten verf�gbaren Bildschirm legen
+				// neuen BV auf den letzten verfügbaren Bildschirm legen
 				GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
 				GraphicsDevice[] devices = env.getScreenDevices();
 				GraphicsDevice device = devices[devices.length - 1];
@@ -1003,7 +1003,7 @@ public class BeamerGUI extends JFrame {
 				actualSongSprache.setText(" "); //$NON-NLS-1$
 				actualSongFolie.setText(" "); //$NON-NLS-1$
 				beamerview = new BeamerView(newsong, titelfont, textfont, translatefont, copyrightfont, getLogoForBack(), false, getThis(), gc, foil);
-				// ScrollBar �bernehmen
+				// ScrollBar übernehmen
 				try {
 					reur_innen.removeAll();
 					for (int i = 0; i < reur_innen.getMouseWheelListeners().length; i++) {
@@ -1027,7 +1027,7 @@ public class BeamerGUI extends JFrame {
 				ex.printStackTrace();
 			}
 		} else if (beamerview != null && list.getSelectedValue() == null) {
-			// BV l�schen
+			// BV löschen
 			Song newsong = new Song( -2);
 			aktuelleFolie = foil;
 			fillFoilList(newsong);
@@ -1037,7 +1037,7 @@ public class BeamerGUI extends JFrame {
 			actualSongSprache.setText(" "); //$NON-NLS-1$
 			actualSongFolie.setText(" "); //$NON-NLS-1$
 			beamerview.showSong(newsong, titelfont, textfont, translatefont, copyrightfont, false, foil);
-			// ScrollBar �bernehmen
+			// ScrollBar übernehmen
 			try {
 				reur_innen.removeAll();
 				for (int i = 0; i < reur_innen.getMouseWheelListeners().length; i++) {

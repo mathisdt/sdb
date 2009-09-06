@@ -21,15 +21,15 @@ public class Structure implements Cloneable {
 	private GUI parentGUI = null;
 	
 	
-	/** Konstruktor für die Structure */
+	/** Konstruktor fÃ¼r die Structure */
 	public Structure() {
 		// nichts zu tun
 	}
 	
 	/**
-	 * Konstruktor für die Structure
+	 * Konstruktor fÃ¼r die Structure
 	 *
-	 * @param parent  Übergeordnete GUI
+	 * @param parent  Ã¼bergeordnete GUI
 	 */
 	public Structure(GUI parent)  {
 		this.parentGUI = parent;
@@ -56,7 +56,7 @@ public class Structure implements Cloneable {
 	}
 	
 	/**
-	 * Formatiert die Daten zum Füllen eines JTable.
+	 * Formatiert die Daten zum FÃ¼llen eines JTable.
 	 *
 	 * @return   die Daten
 	 */
@@ -99,8 +99,8 @@ public class Structure implements Cloneable {
 	}
 	
 	/**
-	 * Formatiert die Daten zum Füllen eines JTable. Dabei wird nur
-	 * zurückgegeben, was den Kriterien entspricht!
+	 * Formatiert die Daten zum FÃ¼llen eines JTable. Dabei wird nur
+	 * zurÃ¼ckgegeben, was den Kriterien entspricht!
 	 *
 	 * @param titelFilter  Parameter
 	 * @param textFilter   Parameter
@@ -186,7 +186,7 @@ public class Structure implements Cloneable {
 	}
 	
 	/**
-	 * Erzeugt neuen Song, fügt ihn in die Structure ein und gibt ihn zurück.
+	 * Erzeugt neuen Song, fÃ¼gt ihn in die Structure ein und gibt ihn zurÃ¼ck.
 	 *
 	 * @return   der neue Song
 	 */
@@ -197,9 +197,9 @@ public class Structure implements Cloneable {
 	}
 	
 	/**
-	 * Fügt einen Song hinzu
+	 * FÃ¼gt einen Song hinzu
 	 *
-	 * @param song  der hinzuzufügende Song
+	 * @param song  der hinzuzufÃ¼gende Song
 	 */
 	public void addSong(Song song) {
 		Song old = getSongByID(song.getID());
@@ -219,16 +219,16 @@ public class Structure implements Cloneable {
 	}
 	
 	/**
-	 * Löscht einen Song
+	 * LÃ¶scht einen Song
 	 *
-	 * @param song  der zu löschende Song 
+	 * @param song  der zu lÃ¶schende Song 
 	 */
 	public void deleteSong(Song song) {
 		songs.removeElement(song);
 	}
 	
 	/**
-	 * Fügt eine Kopie des Arguments in die Structure ein.
+	 * FÃ¼gt eine Kopie des Arguments in die Structure ein.
 	 *
 	 * @param songtocopy  zu kopierender Song
 	 * @return            die Kopie
@@ -271,12 +271,12 @@ public class Structure implements Cloneable {
 	}
 	
 	/**
-	 * Lädt die Structure aus einer Datei
+	 * LÃ¤dt die Structure aus einer Datei
 	 *
 	 * @param file  Datei
 	 */
 	public void loadFromFile(File file) {
-		// aus Datei file laden (Datei enthält serialisierten Vektor!)
+		// aus Datei file laden (Datei enthÃ¤lt serialisierten Vektor!)
 		if (file.exists() && file.isFile()) {
 			try {
 				ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
@@ -370,7 +370,7 @@ public class Structure implements Cloneable {
 	}
 	
 	/**
-	 * löscht den Song bei dem Index
+	 * lÃ¶scht den Song bei dem Index
 	 *
 	 * @param index  der Index
 	 */

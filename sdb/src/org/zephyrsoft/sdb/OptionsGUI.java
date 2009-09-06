@@ -13,7 +13,7 @@ import org.zephyrsoft.util.*;
 import com.hoardersoft.fontselector.*;
 
 /**
- * GUI f�r die Optionen der SDB
+ * GUI für die Optionen der SDB
  *
  * @author   Mathis Dirksen-Thedens
  */
@@ -260,7 +260,7 @@ public class OptionsGUI extends JFrame {
 		okButton.addActionListener(
 			new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					// die Abst�nde speichern
+					// die Abstände speichern
 					try {
 						getRuntime().put("spup", (new Integer(spup.getText())).intValue()<15 ? new Integer(15) : new Integer(spup.getText())); //$NON-NLS-1$
 						getRuntime().put("sple", new Integer(spleft.getText())); //$NON-NLS-1$

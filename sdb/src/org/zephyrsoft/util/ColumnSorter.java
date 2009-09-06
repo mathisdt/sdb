@@ -62,14 +62,14 @@ public class ColumnSorter implements Comparator {
 		} else if (o1 instanceof String) {
 			String titel1 = ((String)o1).toLowerCase();
 			String titel2 = ((String)o2).toLowerCase();
-			titel1 = StringTools.replace(titel1, "ä", "ae"); //$NON-NLS-1$ //$NON-NLS-2$
-			titel1 = StringTools.replace(titel1, "ö", "oe"); //$NON-NLS-1$ //$NON-NLS-2$
-			titel1 = StringTools.replace(titel1, "ü", "ue"); //$NON-NLS-1$ //$NON-NLS-2$
-			titel1 = StringTools.replace(titel1, "ß", "ss"); //$NON-NLS-1$ //$NON-NLS-2$
-			titel2 = StringTools.replace(titel2, "ä", "ae"); //$NON-NLS-1$ //$NON-NLS-2$
-			titel2 = StringTools.replace(titel2, "ö", "oe"); //$NON-NLS-1$ //$NON-NLS-2$
-			titel2 = StringTools.replace(titel2, "ü", "ue"); //$NON-NLS-1$ //$NON-NLS-2$
-			titel2 = StringTools.replace(titel2, "ß", "ss"); //$NON-NLS-1$ //$NON-NLS-2$
+			titel1 = StringTools.replace(titel1, "Ã¤", "ae"); //$NON-NLS-1$ //$NON-NLS-2$
+			titel1 = StringTools.replace(titel1, "Ã¶", "oe"); //$NON-NLS-1$ //$NON-NLS-2$
+			titel1 = StringTools.replace(titel1, "Ã¼", "ue"); //$NON-NLS-1$ //$NON-NLS-2$
+			titel1 = StringTools.replace(titel1, "ÃŸ", "ss"); //$NON-NLS-1$ //$NON-NLS-2$
+			titel2 = StringTools.replace(titel2, "Ã¤", "ae"); //$NON-NLS-1$ //$NON-NLS-2$
+			titel2 = StringTools.replace(titel2, "Ã¶", "oe"); //$NON-NLS-1$ //$NON-NLS-2$
+			titel2 = StringTools.replace(titel2, "Ã¼", "ue"); //$NON-NLS-1$ //$NON-NLS-2$
+			titel2 = StringTools.replace(titel2, "ÃŸ", "ss"); //$NON-NLS-1$ //$NON-NLS-2$
 			if (ascending) {
 				return ((Comparable)titel1).compareTo(titel2);
 			} else {

@@ -13,7 +13,7 @@ import org.zephyrsoft.sdb.structure.*;
 import org.zephyrsoft.util.*;
 
 /**
- * Beamer-Projektionsansicht f�r die Lieder-Datenbank
+ * Beamer-Projektionsansicht für die Lieder-Datenbank
  * @author Mathis Dirksen-Thedens
  */
 
@@ -64,7 +64,7 @@ public class BeamerView extends JFrame {
 		
 		this.setLocale(java.util.Locale.getDefault());
 		
-		// nichts standardm��ig tun, nur exit() darf das Fenster schlie�en!
+		// nichts standardmäßig tun, nur exit() darf das Fenster schließen!
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		
 		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -113,7 +113,7 @@ public class BeamerView extends JFrame {
 		RepaintManager.currentManager(back).setDoubleBufferingEnabled(true);
 		scrollPane.getViewport().setScrollMode(JViewport.BACKINGSTORE_SCROLL_MODE);
 		
-		// gro� auf letztem verf�gbaren Bildschirm machen (wird wohl der Beamer sein):
+		// groß auf letztem verfügbaren Bildschirm machen (wird wohl der Beamer sein):
 		try {
 			this.setSize(dim);
 			if (scrollPane!=null) {
@@ -234,14 +234,14 @@ public class BeamerView extends JFrame {
 			String text1 = text.getText();
 			int von = text1.indexOf("["); //$NON-NLS-1$
 			while (von >= 0) {
-			    int vorher = 0; // z�hlt Leerzeichen vorher
+			    int vorher = 0; // zählt Leerzeichen vorher
 			    while (text1.substring(von-vorher-1,von-vorher).equals(" ")) { //$NON-NLS-1$
 				    vorher++;
 				}
 			    text1 = text1.substring(0, von) + text1.substring(von+1);
 			    vonalle.addElement(new Integer(von-vorher));
 			    int bis = text1.indexOf("]", von); //$NON-NLS-1$
-			    int nachher = 0; // z�hlt Leerzeichen nachher
+			    int nachher = 0; // zählt Leerzeichen nachher
 				while (text1.substring(bis+nachher+1,bis+nachher+2).equals(" ")) { //$NON-NLS-1$
 				    nachher++;
 				}
@@ -314,9 +314,9 @@ public class BeamerView extends JFrame {
 			text.setRequestFocusEnabled(false);
 			
 			/*
-				Trick, damit die ���-Punkte in den ersten Zeilen angezeigt werden:
+				Trick, damit die äöü-Punkte in den ersten Zeilen angezeigt werden:
 				Rand oben auf 15 Pixel setzen, dann schneidet Linux die Umlaut-
-				Punkte nicht mehr ab! Nat�rlich muss dann die Position und Gr��e
+				Punkte nicht mehr ab! Natürlich muss dann die Position und Größe
 				entsprechend korrigiert werden...
 			*/
 			text.setBorder(BorderFactory.createEmptyBorder(((Integer)parent.getOptions().get(((parent.getOptions().get("zt")==null ? true : (((Boolean)parent.getOptions().get("zt")).booleanValue())) ? "spup" : "sptt"))).intValue(), ((Integer)parent.getOptions().get("sple")).intValue(),0,15)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
@@ -357,6 +357,15 @@ public class BeamerView extends JFrame {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				BeamerView.this.validate();
+			}
+		});
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				// für schnelles Scrollen ohne Ruckeln:
 				scrollPane.getViewport().setScrollMode(JViewport.BLIT_SCROLL_MODE);
 			}

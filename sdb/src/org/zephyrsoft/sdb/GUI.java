@@ -23,7 +23,7 @@ import com.jgoodies.looks.plastic.*;
 import com.jgoodies.looks.plastic.theme.*;
 
 /**
- * GUI f�r die Lieder-Datenbank
+ * GUI für die Lieder-Datenbank
  * @author   Mathis Dirksen-Thedens
  */
 
@@ -43,7 +43,7 @@ public class GUI extends JFrame {
 	
 	public KeyListener globalKeyListener = null;
 	
-	// f�r den Ausdruck definiert:
+	// für den Ausdruck definiert:
 	Font titelfont = new Font("Arial", Font.BOLD, 22); //$NON-NLS-1$
 	Font textfont = new Font("Arial", Font.PLAIN, 16); //$NON-NLS-1$
 	Font translatefont = new Font("Arial", Font.ITALIC, 14); //$NON-NLS-1$
@@ -61,10 +61,10 @@ public class GUI extends JFrame {
 	String[] table_column_names = {Messages.getString("GUI.8"), Messages.getString("GUI.9"), Messages.getString("GUI.10"), "ID"}; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 	private String titelFilter = ""; //$NON-NLS-1$
 	private String textFilter = ""; //$NON-NLS-1$
-	// f�r store und load:
+	// für store und load:
 	private boolean saved = true;
 	
-	// f�r das Speichern der .sdb Datei:
+	// für das Speichern der .sdb Datei:
 	private boolean dbaltered = false;
 	
 	// DND
@@ -132,7 +132,7 @@ public class GUI extends JFrame {
 		LookAndFeelUtil.setMyLookAndFeel();
 		setIconImage(LookAndFeelUtil.getIcon());
 		
-		// Men� definieren
+		// Menü definieren
 		menubar = new JMenuBar();
 		menu_file = new JMenu(Messages.getString("GUI.17")); //$NON-NLS-1$
 		menuitem_file_new = new JMenuItem(Messages.getString("GUI.18")); //$NON-NLS-1$
@@ -158,7 +158,7 @@ public class GUI extends JFrame {
 		menuitem_lang_de = new JMenuItem(Messages.getString("GUI.4")); //$NON-NLS-1$
 		menuitem_lang_en = new JMenuItem(Messages.getString("GUI.5")); //$NON-NLS-1$
 		
-		// Men� zusammenbauen
+		// Menü zusammenbauen
 		menubar.add(menu_file);
 		menubar.add(menu_song);
 		menubar.add(menu_view);
@@ -189,7 +189,7 @@ public class GUI extends JFrame {
 		menu_lang.add(menuitem_lang_de);
 		menu_lang.add(menuitem_lang_en);
 		
-		// nichts standardm��ig tun, nur exit() darf das Fenster schlie�en!
+		// nichts standardmäßig tun, nur exit() darf das Fenster schließen!
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		
 		// GUI-Elemente definieren
@@ -461,7 +461,7 @@ public class GUI extends JFrame {
 						titelFilter = ""; //$NON-NLS-1$
 						filterText(suche_text.getText());
 					} else if (e.getKeyCode() == e.VK_ESCAPE) {
-						// Esc: Filter aufheben & Feld l�schen
+						// Esc: Filter aufheben & Feld löschen
 						suche_text.setText(""); //$NON-NLS-1$
 						filterText(""); //$NON-NLS-1$
 					}
@@ -494,7 +494,7 @@ public class GUI extends JFrame {
 						textFilter = ""; //$NON-NLS-1$
 						filterTitel(suche_titel.getText());
 					} else if (e.getKeyCode() == e.VK_ESCAPE) {
-						// Esc: Filter aufheben & Feld l�schen
+						// Esc: Filter aufheben & Feld löschen
 						suche_titel.setText(""); //$NON-NLS-1$
 						filterTitel(""); //$NON-NLS-1$
 					}
@@ -545,8 +545,8 @@ public class GUI extends JFrame {
 //						}
 //						// Zeit neu setzen
 //						lastKeyTime = curTime;
-//						// jetzt: suchen & erste �bereinstimmung markieren.
-//						// falls keine �bereinst. => nichts tun.
+//						// jetzt: suchen & erste Übereinstimmung markieren.
+//						// falls keine Übereinst. => nichts tun.
 //						for ( int i = 0; i < tablemodel.getRowCount(); i++ ) {
 //							Object thisone = tablemodel.getValueAt(i, 0);
 //							if ( thisone != null && thisone.toString().toLowerCase().startsWith(tosearch.toLowerCase()) ) {
@@ -573,8 +573,8 @@ public class GUI extends JFrame {
 						}
 						// Zeit neu setzen
 						lastKeyTime = curTime;
-						// jetzt: suchen & erste �bereinstimmung markieren.
-						// falls keine �bereinst. => nichts tun.
+						// jetzt: suchen & erste Übereinstimmung markieren.
+						// falls keine Übereinst. => nichts tun.
 						for ( int i = 0; i < tablemodel.getRowCount(); i++ ) {
 							Object thisone = tablemodel.getValueAt(i, 0);
 							if ( thisone != null && thisone.toString().toLowerCase().startsWith(tosearch.toLowerCase()) ) {
@@ -711,8 +711,8 @@ public class GUI extends JFrame {
 			new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if (previouslySelectedIndex != -1) {
-						// store UND load, weil sonst beim n�chsten Listenklick die von
-						// store gesetzten leeren String nochmals gespeichert w�rden!
+						// store UND load, weil sonst beim nächsten Listenklick die von
+						// store gesetzten leeren String nochmals gespeichert würden!
 						store(previouslySelectedIndex);
 						load(previouslySelectedIndex);
 						try {
@@ -776,7 +776,7 @@ public class GUI extends JFrame {
 		
 		jSplitPane1.setDividerLocation(295);
 		
-		// Titel gr��er, Sprache und Tonart kleiner machen
+		// Titel größer, Sprache und Tonart kleiner machen
 		TableColumn column = table.getColumnModel().getColumn(0);
 		column.setPreferredWidth(180);
 		column = table.getColumnModel().getColumn(1);
@@ -925,7 +925,7 @@ public class GUI extends JFrame {
 				reloadModel(false);
 				setSelectedSong(song);
 				load(table.getSelectedRow());
-				// Songtitel markieren zum �berschreiben
+				// Songtitel markieren zum überschreiben
 				tabbedPane.setSelectedIndex(0);
 				titel.setSelectionStart(0);
 				titel.setSelectionEnd(titel.getText().length());
@@ -987,7 +987,7 @@ public class GUI extends JFrame {
 			    reloadModel(false);
 				setSelectedSong(song);
 				load(table.getSelectedRow());
-				// Songtitel markieren zum �berschreiben
+				// Songtitel markieren zum überschreiben
 				tabbedPane.setSelectedIndex(0);
 				titel.setSelectionStart(0);
 				titel.setSelectionEnd(titel.getText().length());
@@ -1038,7 +1038,7 @@ public class GUI extends JFrame {
 		bisalle = new Vector();
 		von = text1.indexOf("["); //$NON-NLS-1$
 		while (von >= 0) {
-		    int vorher = 0; // z�hlt Zeichen vorher
+		    int vorher = 0; // zählt Zeichen vorher
 		    try {
 			    while (!text1.substring(von-vorher-1,von-vorher).equals("\n")) { //$NON-NLS-1$
 				    vorher++;
@@ -1049,7 +1049,7 @@ public class GUI extends JFrame {
 		    if (bis == -1) {
 		        bis = text1.length();
 		    }
-		    int nachher = 0; // z�hlt Zeichen nachher
+		    int nachher = 0; // zählt Zeichen nachher
 		    try {
 				while (!text1.substring(bis+nachher+1,bis+nachher+2).equals("\n")) { //$NON-NLS-1$
 				    nachher++;
@@ -1106,7 +1106,7 @@ public class GUI extends JFrame {
 		new OptionsGUI(this);
 	}
 	private final void showActualSongPresentation() {
-		// BeamerGUI �ffnen/benutzen, Song dort anf�gen und BeamerGUI i.d.Vordergrund
+		// BeamerGUI öffnen/benutzen, Song dort anfügen und BeamerGUI i.d.Vordergrund
 		do_showbeamercontrol();
 		try {
 		    beamergui.addSong(structure.getSongByID(Integer.parseInt((String)table.getModel().getValueAt(table.getSelectedRow(), 3))));
@@ -1205,7 +1205,7 @@ public class GUI extends JFrame {
 		}
 	}
 	
-	/** Jetzt die Variante dass man einen Song �bergibt (z.B. prevSong) */
+	/** Jetzt die Variante dass man einen Song übergibt (z.B. prevSong) */
 	protected void load(Song song) {
 		if (song != null && saved) {
 			try {
@@ -1231,7 +1231,7 @@ public class GUI extends JFrame {
 				//System.out.println("store " + index);
 				Song song = structure.getSongByID(Integer.parseInt((String)table.getModel().getValueAt(index, 3)));
 				
-				// hat sich etwas ge�ndert?
+				// hat sich etwas geändert?
 				if (!(song.getTitel().equals(titel.getText()) &&
 						song.getSprache().equals((String)sprache.getSelectedItem()) &&
 						song.getTonart().equals(tonart.getText()) &&
@@ -1252,7 +1252,7 @@ public class GUI extends JFrame {
 				setFieldsEditable(false);
 				saved = true;
 			} catch (ArrayIndexOutOfBoundsException ex) {
-				// das letzte Lied in der Liste wurde gel�scht!
+				// das letzte Lied in der Liste wurde gelöscht!
 				//System.out.println("Alles OK.");
 			}
 			catch (Exception ex) {
@@ -1392,7 +1392,7 @@ public class GUI extends JFrame {
 		reloadModel(false);
 		setSelectedSong(song);
 		load(table.getSelectedRow());
-		// Songtitel markieren zum �berschreiben
+		// Songtitel markieren zum überschreiben
 		tabbedPane.setSelectedIndex(0);
 		titel.setSelectionStart(0);
 		titel.setSelectionEnd(titel.getText().length());
@@ -1408,13 +1408,13 @@ public class GUI extends JFrame {
 		}
 		Song song = structure.insertNewSong();
 		
-		// Zwischenablagen-Kunstst�ck:
+		// Zwischenablagen-Kunststück:
 		song.importTextFromClipboard(this);
 		
 		reloadModel(false);
 		setSelectedSong(song);
 		load(table.getSelectedRow());
-		// Songtitel markieren zum �berschreiben
+		// Songtitel markieren zum überschreiben
 		tabbedPane.setSelectedIndex(0);
 		titel.setSelectionStart(0);
 		titel.setSelectionEnd(titel.getText().length());
@@ -1424,7 +1424,7 @@ public class GUI extends JFrame {
 	
 	/** Description of the Method */
 	protected void songdelete() {
-		// markierten Song l�schen
+		// markierten Song löschen
 		Song song = getSelectedSong();
 		if (song != null) {
 			structure.deleteSong(song);
@@ -1620,9 +1620,9 @@ public class GUI extends JFrame {
 			Options in = (Options)ois.readObject();
 			ois.close();
 			fis.close();
-			// Runtime-Objekt �berschreiben
+			// Runtime-Objekt überschreiben
 			options = (Options)in.clone();
-			// zur�ckgeben
+			// zurückgeben
 			return in;
 		} catch (FileNotFoundException ex) {
 			return getDefaultOptions();
@@ -1630,7 +1630,7 @@ public class GUI extends JFrame {
 	}
 	
 	public void saveOptions(Options tosave) throws Exception {
-		// Runtime-Objekt �berschreiben
+		// Runtime-Objekt überschreiben
 		boolean vorher = ((Boolean)options.get("bst")).booleanValue(); //$NON-NLS-1$
 		options = (Options)tosave.clone();
 		boolean nachher = ((Boolean)options.get("bst")).booleanValue(); //$NON-NLS-1$

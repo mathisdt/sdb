@@ -17,7 +17,7 @@ import com.lowagie.text.Font;
 import com.lowagie.text.pdf.*;
 
 /**
- * Druck-Voransicht f�r die Lieder-Datenbank
+ * Druck-Voransicht für die Lieder-Datenbank
  * @author Mathis Dirksen-Thedens
  */
 
@@ -98,7 +98,7 @@ public class PrintView extends JFrame {
 		String text1 = text.getText();
 		int von = text1.indexOf("["); //$NON-NLS-1$
 		while (von >= 0) {
-		    int vorher = 0; // z�hlt Leerzeichen vorher
+		    int vorher = 0; // zählt Leerzeichen vorher
 		    while (text1.substring(von-vorher-1,von-vorher).equals(" ")) { //$NON-NLS-1$
 			    vorher++;
 			}
@@ -109,7 +109,7 @@ public class PrintView extends JFrame {
 		        bis = text1.substring(von).length();
 		        text1 += "]"; //$NON-NLS-1$
 		    }
-		    int nachher = 0; // z�hlt Leerzeichen nachher
+		    int nachher = 0; // zählt Leerzeichen nachher
 			while (text1.substring(bis+nachher+1,bis+nachher+2).equals(" ")) { //$NON-NLS-1$
 			    nachher++;
 			}
@@ -205,8 +205,8 @@ public class PrintView extends JFrame {
 		pack();
 		setSize(new Dimension(640, 480));
 		
-		// jetzt die Gr��e von "back" setzen, passend zu allen darauf liegenden Components
-		//                        Breite, H�he
+		// jetzt die Größe von "back" setzen, passend zu allen darauf liegenden Components
+		//                        Breite, Höhe
 		Dimension size = new Dimension(1, 1);
 		Component[] components = back.getComponents();
 		for ( int i = 0; i < components.length; i++ ) {

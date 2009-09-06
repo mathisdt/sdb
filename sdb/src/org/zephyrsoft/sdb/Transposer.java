@@ -9,7 +9,7 @@ import org.zephyrsoft.sdb.structure.*;
 import org.zephyrsoft.util.*;
 
 /**
- * GUI f�r das Transponieren eines Liedes der Lieder-Datenbank.<br>
+ * GUI für das Transponieren eines Liedes der Lieder-Datenbank.<br>
  * Akkordformat: A7/F oder A7|9 oder A7.9 (der Slash "/" nur bei Bassnote).
  * @author Mathis Dirksen-Thedens
  */
