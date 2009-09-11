@@ -1126,7 +1126,9 @@ public class GUI extends JFrame {
 			table.setRowSelectionInterval(0, 0);
 			table.removeRowSelectionInterval(0, table.getRowCount() - 1);
 			previouslySelectedIndex = -1;
-		} catch (Exception ex) {}
+		} catch (Exception ex) {
+			// ignore exception
+		}
 	}
 	
 	/**
@@ -1142,7 +1144,9 @@ public class GUI extends JFrame {
 			table.setRowSelectionInterval(0, 0);
 			table.removeRowSelectionInterval(0, table.getRowCount() - 1);
 			previouslySelectedIndex = -1;
-		} catch (Exception ex) {}
+		} catch (Exception ex) {
+			// ignore exception
+		}
 	}
 	
 	/** Description of the Method */

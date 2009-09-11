@@ -863,7 +863,6 @@ public class BeamerGUI extends JFrame {
 				GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
 				GraphicsDevice[] devices = env.getScreenDevices();
 				GraphicsDevice device = devices[devices.length - 1];
-				Dimension dim = new Dimension(device.getDisplayMode().getWidth(), device.getDisplayMode().getHeight());
 				GraphicsConfiguration gc = device.getDefaultConfiguration();
 				
 				beamerview = new BeamerView(null, titelfont, textfont, translatefont, copyrightfont, getLogoForBack(), false, getThis(), gc, BeamerView.FOIL_NUMBER_TO_SHOW_LOGO);

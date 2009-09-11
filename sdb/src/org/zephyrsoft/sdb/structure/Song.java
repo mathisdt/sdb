@@ -582,6 +582,9 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 	}
 	
 	public boolean equals(Object obj) {
+		if (obj==null) {
+			return false;
+		}
 		boolean ret = false;
 		Song comp = null;
 		try {

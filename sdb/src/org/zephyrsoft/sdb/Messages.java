@@ -14,11 +14,16 @@ public class Messages {
 
 	private Messages() {
 		// BUNDLE_NAME einlesen aus Datei language
+		BufferedReader in = null;
 		try {
-			BufferedReader in = new BufferedReader(new FileReader(new File("language")));//$NON-NLS-1$
+			in = new BufferedReader(new FileReader(new File("language")));//$NON-NLS-1$
 			String language = in.readLine();
-			BUNDLE_NAME = "lang_" + language.toLowerCase().trim(); //$NON-NLS-1$
-			RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
+			if (language!=null) {
+				BUNDLE_NAME = "lang_" + language.toLowerCase().trim(); //$NON-NLS-1$
+				RESOURCE_BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
+			} else {
+				throw new Exception();
+			}
 		} catch(Exception ex) {
 			RESOURCE_BUNDLE = ResourceBundle.getBundle(FALLBACK_BUNDLE_NAME);
 			try {
@@ -28,6 +33,14 @@ public class Messages {
 				out.close();
 			} catch(Exception ex2) {
 				System.err.println("couldn't write new language setting to file \"language\"");//$NON-NLS-1$
+			}
+		} finally {
+			if (in!=null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					// ignore exception at this point
+				}
 			}
 		}
 		// VERSION_RESOURCE_BUNDLE einlesen
