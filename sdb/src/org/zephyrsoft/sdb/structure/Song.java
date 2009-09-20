@@ -32,7 +32,7 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 	
 	public String getFirstLine() {
 		String title = getTitel();
-		String ret = new String(title);
+		String ret = title;
 		String text = getOnlyText() + "\n"; //$NON-NLS-1$
 		int i = text.indexOf("\n"); //$NON-NLS-1$
 		if (i != -1) {
@@ -83,7 +83,7 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 				text += "\n"; //$NON-NLS-1$
 			}
 			while ( clipcontent.indexOf("\n", pos) != -1 ) { //$NON-NLS-1$
-				before = new String(line);
+				before = line;
 				line = clipcontent.substring(pos, clipcontent.indexOf("\n", pos)); //$NON-NLS-1$
 				pos = clipcontent.indexOf("\n", pos) + 1; // nach Zeilensprung weitersuchen //$NON-NLS-1$
 				//System.out.println("isTextLine = " + isTextLine(line) + " - " + line);
@@ -173,13 +173,13 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 	/** immer nur ein Leerzeichen zwischen den Worten,
 	 *  am Zeilenanfang aber mehrere erlauben zum Einrücken
 	 */
-	private String correctspacesinthemiddle(String my) {
-	    int pos1 = my.indexOf("  "); //$NON-NLS-1$
+	private String correctspacesinthemiddle(String string) {
+	    int pos1 = string.indexOf("  "); //$NON-NLS-1$
 		while (pos1 >= 0) {
 		    // Leerzeichen vor pos1 zählen
 		    int blanks = 0;
 		    try {
-			    while (my.substring(pos1-blanks-1,pos1-blanks).equals(" ")) { //$NON-NLS-1$
+			    while (string.substring(pos1-blanks-1,pos1-blanks).equals(" ")) { //$NON-NLS-1$
 			        blanks++;
 			    }
 		    } catch (Exception ex) {
@@ -189,25 +189,25 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 		    // was liegt davor?
 		    String davorliegt = "\n"; //$NON-NLS-1$
 		    try {
-		        davorliegt = my.substring(pos1-blanks-1,pos1-blanks);
+		        davorliegt = string.substring(pos1-blanks-1,pos1-blanks);
 		    } catch(Exception ex) {
 		        //System.out.println("Song - Anfang!");
 		        // der Anfang des Liedes
 		    }
 		    if (!davorliegt.equals("\n")) { //$NON-NLS-1$
-			    my = my.substring(0, pos1) +
+			    string = string.substring(0, pos1) +
 					" " + //$NON-NLS-1$
-					my.substring(pos1 + 2);
-			    pos1 = my.indexOf("  ", pos1); //$NON-NLS-1$
+					string.substring(pos1 + 2);
+			    pos1 = string.indexOf("  ", pos1); //$NON-NLS-1$
 		    } else {
-		        pos1 = my.indexOf("  ", pos1 + 1); //$NON-NLS-1$
+		        pos1 = string.indexOf("  ", pos1 + 1); //$NON-NLS-1$
 		    }
 		}
-		return my;
+		return string;
 	}
 	
 	public String getOnlyText() {
-		String dtext = new String(text); 
+		String dtext = text; 
 		dtext = StringTools.replace(dtext, GUI.SEPARATOR, ""); //$NON-NLS-1$
 		String my = ""; //$NON-NLS-1$
 		int pos = 0;
@@ -252,7 +252,7 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 //		DEBUG:
 //		System.out.println("***1*** "+text);
 		
-		String dtext = new String(text); 
+		String dtext = text; 
 		dtext = StringTools.replace(dtext, GUI.SEPARATOR, ""); //$NON-NLS-1$
 		String my = "\n"; //$NON-NLS-1$
 		String before = ""; //$NON-NLS-1$
@@ -262,7 +262,7 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 			dtext += "\n"; //$NON-NLS-1$
 		}
 		while ( dtext.indexOf("\n", pos) != -1 ) { //$NON-NLS-1$
-			before = new String(line);
+			before = line;
 			line = dtext.substring(pos, dtext.indexOf("\n", pos)); //$NON-NLS-1$
 			pos = dtext.indexOf("\n", pos) + 1; // nach Zeilensprung weitersuchen //$NON-NLS-1$
 			while (line.lastIndexOf("\n") >=0 && line.lastIndexOf("\n") == line.length()-1) { //$NON-NLS-1$ //$NON-NLS-2$
@@ -291,9 +291,9 @@ public class Song implements java.io.Serializable, java.util.Comparator, Cloneab
 		return my;
 	}
 	
-	public static boolean isEmpty(String arg) {
-		arg = StringTools.replace(arg, " ", ""); //$NON-NLS-1$ //$NON-NLS-2$
-		if (arg.equals("")) { //$NON-NLS-1$
+	public static boolean isEmpty(String string) {
+		string = StringTools.replace(string, " ", ""); //$NON-NLS-1$ //$NON-NLS-2$
+		if (string.equals("")) { //$NON-NLS-1$
 			return true;
 		} else {
 			return false;

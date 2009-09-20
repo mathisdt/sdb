@@ -8,7 +8,7 @@ import org.zephyrsoft.sdb.structure.*;
 public class SongTransferable implements Transferable, Serializable {
 
 
-	private final static DataFlavor[] flavors = {
+	private final static DataFlavor[] FLAVORS = {
 				new SongDataFlavor()
 			};
 	        
@@ -34,7 +34,7 @@ public class SongTransferable implements Transferable, Serializable {
 	
 	public synchronized DataFlavor[]
 	getTransferDataFlavors() {
-		return flavors;
+		return FLAVORS;
 	}
 	
 	public boolean isDataFlavorSupported(DataFlavor flavor) {

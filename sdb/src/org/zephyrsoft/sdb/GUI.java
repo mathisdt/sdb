@@ -389,7 +389,7 @@ public class GUI extends JFrame {
 					} else if (e.getKeyCode() == KeyEvent.VK_F19) {
 						// blank Display
 						if (beamergui != null) {
-							beamergui.do_empty();
+							beamergui.do_empty(true);
 						}
 					} else if (e.getKeyCode() == KeyEvent.VK_F21) {
 						// show Pres. Control Window
@@ -880,6 +880,7 @@ public class GUI extends JFrame {
 					beamergui.setLocation(location);
 					beamergui.setVisible(true);
 					beamergui.requestFocus();
+					beamergui.requestFocusInList();
 				}
 			});
 		}

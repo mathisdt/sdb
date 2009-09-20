@@ -13,6 +13,7 @@ import javax.swing.event.*;
 
 import org.pushingpixels.trident.*;
 import org.pushingpixels.trident.Timeline.*;
+import org.pushingpixels.trident.ease.*;
 import org.zephyrsoft.sdb.dnd.*;
 import org.zephyrsoft.sdb.structure.*;
 import org.zephyrsoft.util.*;
@@ -528,14 +529,14 @@ public class BeamerGUI extends JFrame {
 		emptyButton.addActionListener(
 			new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					do_empty();
+					do_empty(true);
 				}
 			}
 		);
 		logoButton.addActionListener(
 			new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					do_empty();
+					do_empty(false);
 					do_showlogo();
 				}
 			}
@@ -604,28 +605,36 @@ public class BeamerGUI extends JFrame {
 		setVisible(true);
 	}
 	
+	public void requestFocusInList() {
+		list.requestFocus();
+	}
+
 	public void updateJumpButtons() {
 		reur_aussen.removeAll();
 		if (list.getSelectedValue() != null) {
 			java.util.List[] lists = beamerview.getTextWithPositions();
 			for (int i = 0; i < lists[0].size(); i++) {
 				String txt = (String)lists[0].get(i);
-				final Integer pos = (Integer)lists[1].get(i);
-				// create new button in reur_aussen
-				JButton butt = new JButton();
-				butt.setText(txt.substring(0, 10) + "..."); //$NON-NLS-1$
-				butt.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						if (scrollTimeline!=null && scrollTimeline.getState()==TimelineState.PLAYING_FORWARD) {
-							scrollTimeline.cancel();
+				if (txt!=null) {
+					final Integer pos = (Integer)lists[1].get(i);
+					// create new button in reur_aussen
+					JButton butt = new JButton();
+					int len = Math.min(10, txt.length());
+					butt.setText(txt.substring(0, len) + "..."); //$NON-NLS-1$
+					butt.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							if (scrollTimeline!=null && scrollTimeline.getState()==TimelineState.PLAYING_FORWARD) {
+								scrollTimeline.cancel();
+							}
+							scrollTimeline = new Timeline(beamerview.scrollPane.getViewport());
+							scrollTimeline.addPropertyToInterpolateTo("viewPosition", new Point(0, pos.intValue()), new JumpingPointInterpolator()); //$NON-NLS-1$
+							scrollTimeline.setDuration(1200);
+							scrollTimeline.setEase(new Spline((float)0.8));
+							scrollTimeline.play();
 						}
-						scrollTimeline = new Timeline(beamerview.scrollPane.getViewport());
-						scrollTimeline.addPropertyToInterpolateTo("viewPosition", new Point(0, pos.intValue())); //$NON-NLS-1$
-						scrollTimeline.setDuration(1200);
-						scrollTimeline.play();
-					}
-				});
-				reur_aussen.add(butt);
+					});
+					reur_aussen.add(butt);
+				}
 			}
 		}
 	}
@@ -653,7 +662,7 @@ public class BeamerGUI extends JFrame {
 		}
 	}
 	
-	public void do_empty() {
+	public void do_empty(boolean moveSelectionToNextSong) {
 		try {
 			int selected_was_list = list.getSelectedIndex();
 			int selected_was = -1;
@@ -662,7 +671,7 @@ public class BeamerGUI extends JFrame {
 			}
 			list.removeSelectionInterval(0, list.getModel().getSize() - 1);
 			showActualSong();
-			if (selected_was != -1 && selected_was+1 < structure.getSongCount()) {
+			if (moveSelectionToNextSong && selected_was != -1 && selected_was+1 < structure.getSongCount()) {
 				list.setSelectedIndex(selected_was+1);
 			} else if (selected_was != -1) {
 				list.setSelectedIndex(selected_was);
