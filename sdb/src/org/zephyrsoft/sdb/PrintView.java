@@ -4,17 +4,14 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
-
 import javax.swing.*;
 import javax.swing.text.*;
-
-import org.zephyrsoft.sdb.structure.*;
-import org.zephyrsoft.util.*;
-
 import com.lowagie.text.*;
 import com.lowagie.text.Document;
-import com.lowagie.text.Font;
 import com.lowagie.text.pdf.*;
+import org.zephyrsoft.sdb.structure.*;
+import org.zephyrsoft.util.*;
+import org.zephyrsoft.util.easyprint.*;
 
 /**
  * Druck-Voransicht für die Lieder-Datenbank
@@ -45,6 +42,9 @@ public class PrintView extends JFrame {
 	java.awt.Font mytranslatefont = null;
 	java.awt.Font mycopyrightfont = null;
 	boolean myprintaccords = true;
+	
+	StyledDocument doc = null;
+	JTextPane text = null;
 	
 	public PrintView(GUI gui, Song song, java.awt.Font titelfont, java.awt.Font textfont, java.awt.Font translatefont, java.awt.Font copyrightfont, boolean printAccords, boolean printing, int abstandLinks, int abstandOben) {
 		super(Messages.getString("PrintView.0") + song.getTitel()); //$NON-NLS-1$
@@ -85,7 +85,7 @@ public class PrintView extends JFrame {
 		// Text draufschreiben:
 		JTextArea titel = new JTextArea(song.getTitel()); // + StringTools.repeat(" ", ANZAHL_KORREKTUR_LEERZEICHEN)); //$NON-NLS-1$
 		titel.setEditable(false);
-		JTextPane text = new JTextPane();
+		text = new JTextPane();
 		if ( printAccords ) {
 			text.setText(song.getTextAndAccordsInFont(textfont, printing));
 		} else {
@@ -120,7 +120,7 @@ public class PrintView extends JFrame {
 		text.setText(text1 + "\n\n\n" + song.getCopyright()); //$NON-NLS-1$
 		text.setFont(textfont);
 		
-		StyledDocument doc = text.getStyledDocument();
+		doc = text.getStyledDocument();
 		Style defaultstyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
 		
 		Style titlestyle = doc.addStyle("title", defaultstyle); //$NON-NLS-1$
@@ -437,15 +437,20 @@ public class PrintView extends JFrame {
 	}
 	
 	protected void printThis() {
-		int RAND = 0;
-		try {
-			PrintView temp = new PrintView(parent, (Song)mysong.clone(), mytitelfont, mytextfont, mytranslatefont, mycopyrightfont, myprintaccords, true, RAND, RAND);
-			PrintUtilities.printComponent(temp.getContent());
-			temp.dispose();
-		} catch (Exception ex) {
-			System.out.println("CAUGHT:"); //$NON-NLS-1$
-			ex.printStackTrace();
-		}
+		// alt: formatierten Component drucken (kann keinen mehrseitigen Ausdruck)
+//		int RAND = 0;
+//		try {
+//			PrintView temp = new PrintView(parent, (Song)mysong.clone(), mytitelfont, mytextfont, mytranslatefont, mycopyrightfont, myprintaccords, true, RAND, RAND);
+//			PrintUtilities.printComponent(temp.getContent());
+//			temp.dispose();
+//		} catch (Exception ex) {
+//			System.out.println("CAUGHT:"); //$NON-NLS-1$
+//			ex.printStackTrace();
+//		}
+		
+		// TODO: formatierter RTF-Text kann auch mit EasyPrint gedruckt werden!
+		// neu: Plain Text drucken
+		EasyPrint.printPlain(mysong.getTitel() + "\n\n" + mysong.getText() + "\n\n\n" + mysong.getCopyright(), "Song Database - " + mysong.getTitel(), true);
 	}
 	
 	public JPanel getContent() {
