@@ -357,15 +357,6 @@ public class BeamerView extends JFrame {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				BeamerView.this.validate();
-			}
-		});
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 				// für schnelles Scrollen ohne Ruckeln:
 				scrollPane.getViewport().setScrollMode(JViewport.BLIT_SCROLL_MODE);
 			}
