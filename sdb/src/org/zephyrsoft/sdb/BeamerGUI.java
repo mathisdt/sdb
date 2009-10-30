@@ -36,6 +36,9 @@ public class BeamerGUI extends JFrame {
 	
 	public boolean closing = false;
 	
+	/** if initially true, program will use a non-standard pulse source */
+	private static boolean setCustomPulseSource = true;
+	
 	Font titelfont = null;
 	Font textfont = null;
 	Font translatefont = null;
@@ -626,10 +629,33 @@ public class BeamerGUI extends JFrame {
 							if (scrollTimeline!=null && scrollTimeline.getState()==TimelineState.PLAYING_FORWARD) {
 								scrollTimeline.cancel();
 							}
-							scrollTimeline = new Timeline(beamerview.scrollPane.getViewport());
-							scrollTimeline.addPropertyToInterpolateTo("viewPosition", new Point(0, pos.intValue()), new JumpingPointInterpolator()); //$NON-NLS-1$
+							if (setCustomPulseSource) {
+								// install pulse source which fires only every 75ms (default is every 40ms)
+								TridentConfig.getInstance().setPulseSource(
+						            new TridentConfig.PulseSource() {
+						               @Override
+						               public void waitUntilNextPulse() {
+						                  try {
+						                     Thread.sleep(75);
+						                  } catch (InterruptedException ie) {
+						                     ie.printStackTrace();
+						                  }
+						               }
+						            });
+								setCustomPulseSource = false;
+							}
+							scrollTimeline = new Timeline();
+//							scrollTimeline.addPropertyToInterpolateTo("viewPosition", new Point(0, pos.intValue()), new JumpingPointInterpolator()); //$NON-NLS-1$
+							scrollTimeline.addPropertyToInterpolate(
+								Timeline
+									.property("viewPosition") //$NON-NLS-1$
+									.on(beamerview.scrollPane.getViewport())
+									.fromCurrent()
+									.to(new Point(0, pos.intValue()))
+//									.interpolatedWith(new JumpingPointInterpolator())
+							);
 							scrollTimeline.setDuration(1200);
-							scrollTimeline.setEase(new Spline((float)0.8));
+							scrollTimeline.setEase(new Spline(0.8f));
 							scrollTimeline.play();
 						}
 					});
