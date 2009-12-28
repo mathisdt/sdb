@@ -623,7 +623,7 @@ public class BeamerGUI extends JFrame {
 							if (animator!=null && animator.isRunning()) {
 								animator.cancel();
 							} else if (animator==null) {
-								initAnimatorAndTransition();
+								initAnimator();
 							}
 						    beamerview.setMoveToPosition(pos.intValue());
 						    transition.start();
@@ -635,13 +635,18 @@ public class BeamerGUI extends JFrame {
 		}
 	}
 	
-	public void initAnimatorAndTransition() {
+	public void initAnimator() {
 		animator = new Animator(1200);
 	    animator.setAcceleration(.5f);
         animator.setDeceleration(.5f);
         transition = new ScreenTransition(beamerview.getScrollPane().getViewport(), beamerview, animator);
 //    	ScrollEffect scroller = new ScrollEffect(beamerview.getScrollPane().getViewport());
 //    	EffectsManager.setEffect(beamerview.getScrollPane().getViewport(), scroller, EffectsManager.TransitionType.CHANGING);
+	}
+	
+	public void initTransitionRun() {
+		beamerview.setMoveToPosition(0);
+	    transition.start();
 	}
 	
 	public void sortlist(boolean byTitle) {

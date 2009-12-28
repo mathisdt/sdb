@@ -34,7 +34,7 @@ public class BeamerView extends JFrame implements TransitionTarget {
 	JPanel back = null;
 	
 	private JLabel titel;
-	private JTextPane text;
+	private MyJTextPane text;
 	private List textPositions;
 	private List textParts;
 	
@@ -116,9 +116,9 @@ public class BeamerView extends JFrame implements TransitionTarget {
 		pack();
 		show();
 		
+		RepaintManager.currentManager(back).setDoubleBufferingEnabled(true);
 		if (specialMode) {
 			// Performance-Tuning:
-			RepaintManager.currentManager(back).setDoubleBufferingEnabled(true);
 			scrollPane.getViewport().setScrollMode(JViewport.BACKINGSTORE_SCROLL_MODE);
 		}
 		
@@ -354,7 +354,8 @@ public class BeamerView extends JFrame implements TransitionTarget {
 				public void run() {
 					calculateTextPositions();
 					parent.updateJumpButtons();
-					parent.initAnimatorAndTransition();
+					parent.initAnimator();
+					parent.initTransitionRun();
 					parent.validate();
 				}
 			});
@@ -555,12 +556,15 @@ public class BeamerView extends JFrame implements TransitionTarget {
 		
 		public MyJTextPane() {
 			super();
-			DefaultCaret caret = (DefaultCaret) getCaret();
-			caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+			caretNoUpdate();
 		}
 		
         public MyJTextPane(StyledDocument doc) {
         	super(doc);
+        	caretNoUpdate();
+        }
+        
+        private void caretNoUpdate() {
         	DefaultCaret caret = (DefaultCaret) getCaret();
 			caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
         }
