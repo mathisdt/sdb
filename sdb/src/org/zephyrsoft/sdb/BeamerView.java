@@ -8,7 +8,10 @@ import java.util.List;
 
 import javax.swing.*;
 import javax.swing.text.*;
+import javax.swing.text.NavigationFilter.*;
+import javax.swing.text.Position.*;
 
+import org.jdesktop.animation.transitions.*;
 import org.zephyrsoft.sdb.structure.*;
 import org.zephyrsoft.util.*;
 
@@ -17,11 +20,13 @@ import org.zephyrsoft.util.*;
  * @author Mathis Dirksen-Thedens
  */
 
-public class BeamerView extends JFrame {
+public class BeamerView extends JFrame implements TransitionTarget {
 
 	public static int FOIL_NUMBER_TO_SHOW_LOGO = -123;
 	
 	private boolean debug = false;
+	
+	private boolean specialMode = true;
 	
 	JPanel contentPane = null;
 	BorderLayout borderLayout = null;
@@ -32,6 +37,8 @@ public class BeamerView extends JFrame {
 	private JTextPane text;
 	private List textPositions;
 	private List textParts;
+	
+	private int moveToPosition = 0;
 	
 	private Song actualSong = null;
 	
@@ -109,9 +116,11 @@ public class BeamerView extends JFrame {
 		pack();
 		show();
 		
-		// Performance-Tuning:
-		RepaintManager.currentManager(back).setDoubleBufferingEnabled(true);
-		scrollPane.getViewport().setScrollMode(JViewport.BACKINGSTORE_SCROLL_MODE);
+		if (specialMode) {
+			// Performance-Tuning:
+			RepaintManager.currentManager(back).setDoubleBufferingEnabled(true);
+			scrollPane.getViewport().setScrollMode(JViewport.BACKINGSTORE_SCROLL_MODE);
+		}
 		
 		// groß auf letztem verfügbaren Bildschirm machen (wird wohl der Beamer sein):
 		try {
@@ -192,8 +201,10 @@ public class BeamerView extends JFrame {
 			
 			this.setContentPane(scrollPane.getViewport());
 			
-			// nur so ohne Flackern am Anfang:
-			scrollPane.getViewport().setScrollMode(JViewport.BACKINGSTORE_SCROLL_MODE);
+			if (specialMode) {
+				// nur so ohne Flackern am Anfang:
+				scrollPane.getViewport().setScrollMode(JViewport.BACKINGSTORE_SCROLL_MODE);
+			}
 			
 			try {
 				this.setBackground((Color)parent.getOptions().get("bgco")); //$NON-NLS-1$
@@ -206,14 +217,8 @@ public class BeamerView extends JFrame {
 			back.repaint();
 			
 			titel = new JLabel((newsong!=null ? parent.getNormalTitleByID(newsong.getID()) : "")); //$NON-NLS-1$
-			text = new JTextPane() {
-			    public Dimension getPreferredSize(){
-			        Dimension size = super.getPreferredSize();
-			        // "sple"="space on left side"; 15="space on right side"
-			        size.width = getSize().width - ((Integer)parent.getOptions().get("sple")).intValue() - 15; //$NON-NLS-1$
-			        return size;
-			    }
-			};
+			text = new MyJTextPane();
+			
 			if (((Boolean)parent.parent.getOptions().get("mf")).booleanValue()) { //$NON-NLS-1$
 				if ( printAccords ) {
 					text.setText((newsong!=null ? newsong.getTextAndAccordsInFont_Foil(textfont, false, foil) : "")); //$NON-NLS-1$
@@ -349,6 +354,7 @@ public class BeamerView extends JFrame {
 				public void run() {
 					calculateTextPositions();
 					parent.updateJumpButtons();
+					parent.initAnimatorAndTransition();
 					parent.validate();
 				}
 			});
@@ -357,8 +363,10 @@ public class BeamerView extends JFrame {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				BeamerView.this.validate();
-				// für schnelles Scrollen ohne Ruckeln:
-				scrollPane.getViewport().setScrollMode(JViewport.BLIT_SCROLL_MODE);
+				if (specialMode) {
+					// für schnelles Scrollen ohne Ruckeln:
+					scrollPane.getViewport().setScrollMode(JViewport.BLIT_SCROLL_MODE);
+				}
 			}
 		});
 	}
@@ -525,6 +533,44 @@ public class BeamerView extends JFrame {
 			back.validate();
 			this.setContentPane(scrollPane.getViewport());
 		}
+	}
+
+	public void setupNextScreen() {
+		scrollPane.getViewport().setViewPosition(new Point(0, getMoveToPosition()));
+	}
+
+	public int getMoveToPosition() {
+		return moveToPosition;
+	}
+
+	public void setMoveToPosition(int moveToPosition) {
+		this.moveToPosition = moveToPosition;
+	}
+	
+	/**
+	 * customized JTextPane for no-flicker text display
+	 */
+	protected class MyJTextPane extends JTextPane {
+		private static final long serialVersionUID = 1L;
+		
+		public MyJTextPane() {
+			super();
+			DefaultCaret caret = (DefaultCaret) getCaret();
+			caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+		}
+		
+        public MyJTextPane(StyledDocument doc) {
+        	super(doc);
+        	DefaultCaret caret = (DefaultCaret) getCaret();
+			caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+        }
+
+		public Dimension getPreferredSize(){
+	        Dimension size = super.getPreferredSize();
+	        // "sple"="space on left side"; 15="space on right side"
+	        size.width = getSize().width - ((Integer)parent.getOptions().get("sple")).intValue() - 15; //$NON-NLS-1$
+	        return size;
+	    }
 	}
 	
 }

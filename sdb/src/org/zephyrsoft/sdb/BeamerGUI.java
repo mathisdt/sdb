@@ -4,16 +4,12 @@ import java.awt.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
 import java.io.*;
-import java.lang.reflect.*;
-
-import javax.imageio.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
-
-import org.pushingpixels.trident.*;
-import org.pushingpixels.trident.Timeline.*;
-import org.pushingpixels.trident.ease.*;
+import org.jdesktop.animation.timing.*;
+import org.jdesktop.animation.timing.interpolation.*;
+import org.jdesktop.animation.transitions.*;
 import org.zephyrsoft.sdb.dnd.*;
 import org.zephyrsoft.sdb.structure.*;
 import org.zephyrsoft.util.*;
@@ -32,12 +28,10 @@ public class BeamerGUI extends JFrame {
 	
 	protected BeamerView beamerview = null;
 	
-	protected Timeline scrollTimeline = null;
+	protected Animator animator = null;
+	protected ScreenTransition transition = null;
 	
 	public boolean closing = false;
-	
-	/** if initially true, program will use a non-standard pulse source */
-	private static boolean setCustomPulseSource = true;
 	
 	Font titelfont = null;
 	Font textfont = null;
@@ -626,43 +620,28 @@ public class BeamerGUI extends JFrame {
 					butt.setText(txt.substring(0, len) + "..."); //$NON-NLS-1$
 					butt.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
-							if (scrollTimeline!=null && scrollTimeline.getState()==TimelineState.PLAYING_FORWARD) {
-								scrollTimeline.cancel();
+							if (animator!=null && animator.isRunning()) {
+								animator.cancel();
+							} else if (animator==null) {
+								initAnimatorAndTransition();
 							}
-							if (setCustomPulseSource) {
-								// install pulse source which fires only every 75ms (default is every 40ms)
-								TridentConfig.getInstance().setPulseSource(
-						            new TridentConfig.PulseSource() {
-						               @Override
-						               public void waitUntilNextPulse() {
-						                  try {
-						                     Thread.sleep(75);
-						                  } catch (InterruptedException ie) {
-						                     ie.printStackTrace();
-						                  }
-						               }
-						            });
-								setCustomPulseSource = false;
-							}
-							scrollTimeline = new Timeline();
-//							scrollTimeline.addPropertyToInterpolateTo("viewPosition", new Point(0, pos.intValue()), new JumpingPointInterpolator()); //$NON-NLS-1$
-							scrollTimeline.addPropertyToInterpolate(
-								Timeline
-									.property("viewPosition") //$NON-NLS-1$
-									.on(beamerview.scrollPane.getViewport())
-									.fromCurrent()
-									.to(new Point(0, pos.intValue()))
-//									.interpolatedWith(new JumpingPointInterpolator())
-							);
-							scrollTimeline.setDuration(1200);
-							scrollTimeline.setEase(new Spline(0.8f));
-							scrollTimeline.play();
+						    beamerview.setMoveToPosition(pos.intValue());
+						    transition.start();
 						}
 					});
 					reur_aussen.add(butt);
 				}
 			}
 		}
+	}
+	
+	public void initAnimatorAndTransition() {
+		animator = new Animator(1200);
+	    animator.setAcceleration(.5f);
+        animator.setDeceleration(.5f);
+        transition = new ScreenTransition(beamerview.getScrollPane().getViewport(), beamerview, animator);
+//    	ScrollEffect scroller = new ScrollEffect(beamerview.getScrollPane().getViewport());
+//    	EffectsManager.setEffect(beamerview.getScrollPane().getViewport(), scroller, EffectsManager.TransitionType.CHANGING);
 	}
 	
 	public void sortlist(boolean byTitle) {
@@ -1206,5 +1185,32 @@ public class BeamerGUI extends JFrame {
 	
 	public Options getOptions() {
 		return parent.getOptions();
+	}
+	
+	/**
+	 * Custom effect: moves a component to the defined end location
+	 * from the current position
+	 */
+	class ScrollEffect extends Effect {
+	    
+		private JViewport comp = null;
+		
+	    public ScrollEffect(JViewport comp) {
+	    	this.comp = comp;
+	    }
+
+	    /**
+	     * Handles setup of animation that will vary the location during the
+	     * transition
+	     */
+	    @Override
+	    public void init(Animator animator, Effect parentEffect) {
+	        Effect targetEffect = (parentEffect == null) ? this : parentEffect;
+	        PropertySetter ps;
+	        ps = new PropertySetter(targetEffect, "location", 
+	                comp.getViewPosition(), new Point(getEnd().getX(), getEnd().getY()));
+	        animator.addTarget(ps);
+	        super.init(animator, parentEffect);
+	    }
 	}
 }
