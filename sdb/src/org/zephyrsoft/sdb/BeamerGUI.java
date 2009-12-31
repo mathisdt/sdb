@@ -633,6 +633,9 @@ public class BeamerGUI extends JFrame {
 				}
 			}
 		}
+		// damit das Button-Panel sich aktualisiert:
+		this.invalidate();
+		this.repaint();
 	}
 	
 	public void initAnimator() {

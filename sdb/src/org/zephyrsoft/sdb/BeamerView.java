@@ -332,12 +332,7 @@ public class BeamerView extends JFrame implements TransitionTarget {
 			    titel.setBorder(BorderFactory.createEmptyBorder(((Integer)parent.getOptions().get("spup")).intValue(), ((Integer)parent.getOptions().get("sple")).intValue(),15,15)); //$NON-NLS-1$ //$NON-NLS-2$
 				back.add(titel, BorderLayout.NORTH);
 			}
-	
-			SwingUtilities.invokeLater(new Runnable() {
-			    public void run() {
-			        scroll(back, TOP);
-			    }
-			});
+			
 			int[] pixels = new int[16 * 16];
 			Image image = Toolkit.getDefaultToolkit().createImage(
 							  new MemoryImageSource(16, 16, pixels, 0, 16));
@@ -386,8 +381,7 @@ public class BeamerView extends JFrame implements TransitionTarget {
 			if (cursorPos <= text.getText().length()) {
 				Rectangle r = null;
 				try {
-					text.setCaretPosition(cursorPos);
-					r = text.modelToView(text.getCaretPosition());
+					r = text.modelToView(cursorPos);
 				} catch (BadLocationException e) {
 					e.printStackTrace();
 				}
@@ -396,12 +390,6 @@ public class BeamerView extends JFrame implements TransitionTarget {
 				}
 			}
 		}
-		
-		SwingUtilities.invokeLater(new Runnable() {
-		    public void run() {
-		        scroll(back, TOP);
-		    }
-		});
 	}
 	
 	public List[] getTextWithPositions() {
