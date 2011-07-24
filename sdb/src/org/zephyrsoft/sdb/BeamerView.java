@@ -324,7 +324,7 @@ public class BeamerView extends JFrame implements TransitionTarget {
 				Punkte nicht mehr ab! Natürlich muss dann die Position und Größe
 				entsprechend korrigiert werden...
 			*/
-			text.setBorder(BorderFactory.createEmptyBorder(((Integer)parent.getOptions().get(((parent.getOptions().get("zt")==null ? true : (((Boolean)parent.getOptions().get("zt")).booleanValue())) ? "spup" : "sptt"))).intValue(), ((Integer)parent.getOptions().get("sple")).intValue(),0,15)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+			text.setBorder(BorderFactory.createEmptyBorder(((Integer)parent.getOptions().get(((parent.getOptions().get("zt")==null ? true : (((Boolean)parent.getOptions().get("zt")).booleanValue())) ? "sptt" : "spup"))).intValue(), ((Integer)parent.getOptions().get("sple")).intValue(),0,15)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 			text.setEditable(false);
 			back.add(text, BorderLayout.CENTER);
 			back.setBorder(BorderFactory.createEmptyBorder(0, 0, ((Integer)parent.getOptions().get("spdo")).intValue(), 0)); //$NON-NLS-1$
@@ -386,7 +386,7 @@ public class BeamerView extends JFrame implements TransitionTarget {
 					e.printStackTrace();
 				}
 				if (r != null) {
-					textPositions.add(Integer.valueOf(Double.valueOf(r.getY()).intValue()));
+					textPositions.add(Integer.valueOf(Double.valueOf(r.getY()).intValue()) - ((Integer)parent.getOptions().get("spup")).intValue());
 				}
 			}
 		}
